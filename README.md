@@ -1,11 +1,12 @@
-This is the software part of a hardware digital synthesizer which incorporates a sound resynthesis algorithm.
+# Resynth
+
+Software and algorithm development for a hardware digital synthesizer which incorporates a sound resynthesis algorithm.
 
 The synthesizer is designed in PureData and the files located in the Synth directory can only opened with PureData.
 
-The Resynth directory contains everything correlated to the alogorithm which recreates a sound using the synthesizer.
+Contact project lead [https://github.com/succculent](Ada Toydemir) with any questions.
 
-Project is designed and created by
-Ada Toydemir
-. . .
+Funded and created at [Ahmanson Lab](https://polymathic.usc.edu/ahmanson-lab)
 
-This project is made by USC students working with and funded by the Ahmanson Lab.
+
+
