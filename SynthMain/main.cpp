@@ -25,5 +25,3 @@ void play(double *output) {
     
     output[1] = output[0];
 }
-
-
