@@ -36,7 +36,7 @@ double synth(
 	
 	double osc = (osca + oscb) / 2;
     
-    return mod1double;
+    return osc;
 }
 
 double counter = 0.0;
@@ -49,14 +49,14 @@ void play(double *output) {
 	double sin2vol = 0;
 	double tri2vol = 0;
 	double sq2vol = 0;
-    double mod1f = 440;
-    double mod2f = 0;
+    double mod1f = 5;
+    double mod2f = 21;
     double mod3f = 0;
-    double mod1v = 1;
-    double mod2v = 1;
+    double mod1v = 30;
+    double mod2v = 10;
     double mod3v = 1;
 	int mod1ta = 1;
-    int mod2ta = 0;
+    int mod2ta = 1;
     int mod3ta = 0;
     int mod1tb = 0;
     int mod2tb = 0;
