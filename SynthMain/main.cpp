@@ -16,7 +16,7 @@ double myOscOutput = 0.0;
 double myCutoff = 0.2;
 */
 
-double osc, osca, oscb, sine, tri, sq, sine2, tri2, sq2 = 0.0;
+double osc, osca, oscb, sine, tri, sq, sine2, tri2, sq2;
 int freq1 = 440;
 int osc2Freq = 370;
 int osc3Freq = 294;
@@ -31,15 +31,15 @@ double synth(double sinevol, double trivol, double sqvol, double sinevol1, doubl
 	sine = osc1.sinewave(freq1);
 	tri = osc2.triangle(freq1);
 	sq = osc3.square(freq1);
-	osca = (sine*sinevol + tri * trivol + sq * sqvol) / (sinevol + trivol + sqvol);
+	osca = (sine*sinevol + tri * trivol + sq * sqvol) / (sinevol + trivol + sqvol + 0.00000001);
 
 	sine2 = osc4.sinewave(freq1);
 	tri2 = osc5.triangle(freq1);
 	sq2 = osc6.square(freq1);
-	oscb = (sine2*sinevol1 + tri2 * trivol1 + sq2 * sqvol1) / (sinevol1 + trivol1 + sqvol1);
+	oscb = (sine2*sinevol1 + tri2 * trivol1 + sq2 * sqvol1) / (sinevol1 + trivol1 + sqvol1 + 0.00000001);
 
 	osc = (osca + oscb) / 2;
-
+    //cout << "osca " << osca << " oscb " << oscb << " osc " << osc << endl;
 	return osc;
 }
 
@@ -47,14 +47,14 @@ double counter = 0.0;
 
 void play(double *output) {
     
-	counter++;
+	counter+=0.0001;
 
-	double a = counter * 0.2;
-	double b = counter * 0.4;
-	double c = counter * 0.7 + 0.01;
-	double d = counter / 2;
-	double e = counter * 0.1;
-	double f = (counter + 15) /12;
+	double a = sin(counter);
+    double b = 0.5;
+	double c = 0;
+	double d = 0;
+	double e = 0;
+	double f = 0;
 
 	output[0] = synth(a, b, c, d, e, f);
 	output[1] = output[0];
