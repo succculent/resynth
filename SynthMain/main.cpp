@@ -55,14 +55,18 @@ void play(double *output) {
     
 	counter+=0.0001;
 
-	double a = sin(counter);
-    double b = 0.5;
-	double c = 0;
-	double d = 0;
-	double e = 0;
-	double f = 0;
+	double sin1vol = sin(counter);
+    double tri1vol = 0.5;
+	double sq1vol = 0;
+	double sin2vol = 0;
+	double tri2vol = 0;
+	double sq2vol = 0;
+	double mod1f, mod2f, mod3f = 440;
+	double mod1v, mod2v, mod3v = 5;
+	int mod1ta = 1;
+	int mod2ta, mod3ta, mod1tb, mod2tb, mod3tb = 0;
 
-	output[0] = synth(a, b, c, d, e, f);
+	output[0] = synth(sin1vol, tri1vol, sq1vol, sin2vol, tri2vol, sq2vol, mod1f, mod1v, mod2f, mod2v, mod3f, mod3v, mod1ta, mod2ta, mod3ta, mod1tb, mod2tb, mod3tb);
 	output[1] = output[0];
     
     /*
