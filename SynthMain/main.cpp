@@ -17,7 +17,8 @@ double synth(
 	double sin1vol, double tri1vol, double sq1vol,
 	double sin2vol, double tri2vol, double sq2vol,
 	double mod1f, double mod1v, double mod2f, double mod2v, double mod3f, double mod3v,
-	int mod1ta, int mod2ta, int mod3ta, int mod1tb, int mod2tb, int mod3tb //0 if off 1 if on
+	int mod1ta, int mod2ta, int mod3ta, int mod1tb, int mod2tb, int mod3tb, //0 if off 1 if on
+	double cutoff1, double res1, double cutoff2, double res2
 	) {
 
 	double mod1double = mod1.sinewave(mod1f)*mod1v;
@@ -35,8 +36,13 @@ double synth(
 	double oscb = (sine2*sin2vol + tri2 * tri2vol + sq2 * sq2vol) / (sin2vol + tri2vol + sq2vol + 0.00000001);
 	
 	double osc = (osca + oscb) / 2;
-    
-    return osc;
+
+	double f1osc = lpf.lores(osc, cutoff1, res1);
+	double f2osc = hpf.hires(f1osc, cutoff2, res2);
+
+	double out = f2osc;
+
+    return out;
 }
 
 double counter = 0.0;
@@ -61,11 +67,16 @@ void play(double *output) {
     int mod1tb = 0;
     int mod2tb = 0;
     int mod3tb = 0;
+	double cutoff1 = 1000;
+	double res1 = 10; //awtch out 1-?
+	double cutoff2 = 0;
+	double res2 = 10;
 
 	output[0] = synth(sin1vol, tri1vol, sq1vol,
 					sin2vol, tri2vol, sq2vol,
 					mod1f, mod1v, mod2f, mod2v, mod3f, mod3v,
-					mod1ta, mod2ta, mod3ta, mod1tb, mod2tb, mod3tb);
+					mod1ta, mod2ta, mod3ta, mod1tb, mod2tb, mod3tb,
+					cutoff1, res1, cutoff2, res2);
 	output[1] = output[0];
     
     /*
