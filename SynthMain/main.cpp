@@ -16,7 +16,7 @@ double myOscOutput = 0.0;
 double myCutoff = 0.2;
 */
 
-double osc, osca, oscb, sine, tri, sq, sine2, tri2, sq2;
+double osc, osca, oscb, sine, tri, sq, sine2, tri2, sq2, mod1val, mod2val, mod3val;
 int freq1 = 440;
 int osc2Freq = 370;
 int osc3Freq = 294;
@@ -27,18 +27,24 @@ void setup() {//some inits
     
 }
 
-double synth(double sinevol, double trivol, double sqvol, double sinevol1, double trivol1, double sqvol1) {
-	sine = osc1.sinewave(freq1);
-	tri = osc2.triangle(freq1);
-	sq = osc3.square(freq1);
+double synth(
+	double sinevol, double trivol, double sqvol,
+	double sinevol1, double trivol1, double sqvol1,
+	double mod1f, double mod1v, double mod2f, double mod2v, double mod3f, double mod3v,
+	int mod1ta, int mod2ta, int mod3ta, int mod1tb, int mod2tb, int mod3tb //0 if off 1 if on
+	) {
+	sine = osc1.sinewave(freq1 + mod1.sinewave(mod1f)*mod1ta*mod1v + mod2.sinewave(mod2f)*mod2ta*mod2v + mod3.sinewave(mod3f)*mod3ta*mod3v);
+	tri = osc2.triangle(freq1 + mod1.sinewave(mod1f)*mod1ta*mod1v + mod2.sinewave(mod2f)*mod2ta*mod2v + mod3.sinewave(mod3f)*mod3ta*mod3v);
+	sq = osc3.square(freq1 + mod1.sinewave(mod1f)*mod1ta*mod1v + mod2.sinewave(mod2f)*mod2ta*mod2v + mod3.sinewave(mod3f)*mod3ta*mod3v);
 	osca = (sine*sinevol + tri * trivol + sq * sqvol) / (sinevol + trivol + sqvol + 0.00000001);
 
-	sine2 = osc4.sinewave(freq1);
-	tri2 = osc5.triangle(freq1);
-	sq2 = osc6.square(freq1);
+	sine2 = osc4.sinewave(freq1 + mod1.sinewave(mod1f)*mod1tb*mod1v + mod2.sinewave(mod2f)*mod2tb*mod2v + mod3.sinewave(mod3f)*mod3tb*mod3v);
+	tri2 = osc5.triangle(freq1 + mod1.sinewave(mod1f)*mod1tb*mod1v + mod2.sinewave(mod2f)*mod2tb*mod2v + mod3.sinewave(mod3f)*mod3tb*mod3v);
+	sq2 = osc6.square(freq1 + mod1.sinewave(mod1f)*mod1tb*mod1v + mod2.sinewave(mod2f)*mod2tb*mod2v + mod3.sinewave(mod3f)*mod3tb*mod3v);
 	oscb = (sine2*sinevol1 + tri2 * trivol1 + sq2 * sqvol1) / (sinevol1 + trivol1 + sqvol1 + 0.00000001);
-
+	
 	osc = (osca + oscb) / 2;
+
     //cout << "osca " << osca << " oscb " << oscb << " osc " << osc << endl;
 	return osc;
 }
