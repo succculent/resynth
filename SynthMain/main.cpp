@@ -7,7 +7,7 @@ maxiDistortion dist;
 maxiFlanger flang;
 maxiChorus chorus;
 
-int freq1 = 440;
+int freq = 440;
 
 void setup() {//some inits
     
@@ -20,28 +20,31 @@ double synth(
 	int mod1ta, int mod2ta, int mod3ta, int mod1tb, int mod2tb, int mod3tb, //0 if off 1 if on
 	double cutoff1, double res1, double cutoff2, double res2
 	) {
-
+    //carrier frequencies
 	double mod1double = mod1.sinewave(mod1f)*mod1v;
 	double mod2double = mod2.sinewave(mod2f)*mod2v;
 	double mod3double = mod3.sinewave(mod3f)*mod3v;
-
-	double sine = osc1.sinewave(freq1 + mod1double*mod1ta + mod2double*mod2ta + mod3double*mod3ta);
-	double tri = osc2.triangle(freq1 + mod1double*mod1ta + mod2double*mod2ta + mod3double*mod3ta);
-	double sq = osc3.square(freq1 + mod1double*mod1ta + mod2double*mod2ta + mod3double*mod3ta);
-	double osca = (sine*sin1vol + tri * tri1vol + sq * sq1vol) / (sin1vol + tri1vol + sq1vol + 0.00000001);
-
-	double sine2 = osc4.sinewave(freq1 + mod1double*mod1tb + mod2double*mod2tb + mod3double*mod3tb);
-	double tri2 = osc5.triangle(freq1 + mod1double*mod1tb + mod2double*mod2tb + mod3double*mod3tb);
-	double sq2 = osc6.square(freq1 + mod1double*mod1tb + mod2double*mod2tb + mod3double*mod3tb);
-	double oscb = (sine2*sin2vol + tri2 * tri2vol + sq2 * sq2vol) / (sin2vol + tri2vol + sq2vol + 0.00000001);
-	
+    //modified FM frequencies
+    double modA = freq + mod1double*mod1ta + mod2double*mod2ta + mod3double*mod3ta;
+    double modB = freq + mod1double*mod1tb + mod2double*mod2tb + mod3double*mod3tb;
+    //Oscillator A
+	double sine = osc1.sinewave(modA);
+	double tri = osc2.triangle(modA);
+	double sq = osc3.square(modA);
+	double osca = (sine * sin1vol + tri * tri1vol + sq * sq1vol) / (sin1vol + tri1vol + sq1vol + 0.00000001);
+    //Oscillator B
+	double sine2 = osc4.sinewave(modB);
+	double tri2 = osc5.triangle(modB);
+	double sq2 = osc6.square(modB);
+	double oscb = (sine2 * sin2vol + tri2 * tri2vol + sq2 * sq2vol) / (sin2vol + tri2vol + sq2vol + 0.00000001);
+	//Oscillator output
 	double osc = (osca + oscb) / 2;
-
+    //Filters
 	double f1osc = lpf.lores(osc, cutoff1, res1);
 	double f2osc = hpf.hires(f1osc, cutoff2, res2);
 
+    //OUTPUT
 	double out = f2osc;
-
     return out;
 }
 
@@ -67,8 +70,8 @@ void play(double *output) {
     int mod1tb = 0;
     int mod2tb = 0;
     int mod3tb = 0;
-	double cutoff1 = 1000;
-	double res1 = 10; //awtch out 1-?
+	double cutoff1 = 400;
+	double res1 = 5; //awtch out 1-?
 	double cutoff2 = 0;
 	double res2 = 10;
 
