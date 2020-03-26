@@ -58,20 +58,20 @@ void play(double *output) {
 	double sin2vol = 0;
 	double tri2vol = 0;
 	double sq2vol = 0;
-    double mod1f = 5;
-    double mod2f = 21;
+    double mod1f = 2;
+    double mod2f = 0;
     double mod3f = 0;
-    double mod1v = 30;
-    double mod2v = 10;
-    double mod3v = 1;
+    double mod1v = 100;
+    double mod2v = 0;
+    double mod3v = 0;
 	int mod1ta = 1;
     int mod2ta = 1;
     int mod3ta = 0;
     int mod1tb = 0;
     int mod2tb = 0;
     int mod3tb = 0;
-	double cutoff1 = 400;
-	double res1 = 5; //awtch out 1-?
+	double cutoff1 = 340;
+	double res1 = 1; //awtch out 1-?
 	double cutoff2 = 0;
 	double res2 = 10;
 
