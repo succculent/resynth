@@ -107,6 +107,24 @@ public:
 	
 };
 
+class synthOsc {
+
+    maxiOsc sine;
+    maxiOsc tri;
+    maxiOsc sq;
+    double sinvol;
+    double trivol;
+    double sqvol;
+    double freq;
+    
+public:
+    double output();
+    void setSinvol(double vol);
+    void setTrivol(double vol);
+    void setSqvol(double vol);
+    void setFreq(double freq);
+    
+};
 
 class maxiEnvelope {
 	

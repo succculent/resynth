@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00FD794410CF325D00EA9294 /* RtAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FD794110CF325D00EA9294 /* RtAudio.cpp */; };
 		833289281403E9C4003DF5D6 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 833289271403E9C4003DF5D6 /* player.cpp */; };
+		89241F9C242C4704009CED3F /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89241F9B242C4704009CED3F /* test.cpp */; };
 		8938D43023FE21DA0041B7B8 /* audioout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8938D42E23FE21DA0041B7B8 /* audioout.cpp */; };
 		8A34BD591B65677F0026EA0C /* maximilian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A34BD571B65677F0026EA0C /* maximilian.cpp */; };
 		8A34BD5C1B6567E60026EA0C /* stb_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A34BD5A1B6567E60026EA0C /* stb_vorbis.c */; };
@@ -48,6 +49,7 @@
 		4C1D997D10FA76E700D5E940 /* portaudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = portaudio.h; sourceTree = "<group>"; };
 		833289261403E9C4003DF5D6 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		833289271403E9C4003DF5D6 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
+		89241F9B242C4704009CED3F /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		8938D42E23FE21DA0041B7B8 /* audioout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audioout.cpp; sourceTree = "<group>"; };
 		8938D42F23FE21DA0041B7B8 /* audioout.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audioout.hpp; sourceTree = "<group>"; };
 		8A34BD571B65677F0026EA0C /* maximilian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maximilian.cpp; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				833289261403E9C4003DF5D6 /* player.h */,
 				833289271403E9C4003DF5D6 /* player.cpp */,
 				08FB7796FE84155DC02AAC07 /* main.cpp */,
+				89241F9B242C4704009CED3F /* test.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				00FD794410CF325D00EA9294 /* RtAudio.cpp in Sources */,
 				8938D43023FE21DA0041B7B8 /* audioout.cpp in Sources */,
 				8A34BD781B65AA390026EA0C /* maxiBark.cpp in Sources */,
+				89241F9C242C4704009CED3F /* test.cpp in Sources */,
 				833289281403E9C4003DF5D6 /* player.cpp in Sources */,
 				8A34BD591B65677F0026EA0C /* maximilian.cpp in Sources */,
 				8A34BD771B65AA390026EA0C /* maxiAtoms.cpp in Sources */,

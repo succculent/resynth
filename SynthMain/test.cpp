@@ -1,7 +1,6 @@
 #include "maximilian.h"
 
-maxiOsc mod1, mod2, mod3;
-synthOsc osc1, osc2;
+maxiOsc osc1, osc2, osc3, osc4, osc5, osc6, mod1, mod2, mod3;
 maxiEnv voladsr, lpfadsr, hpfadsr;
 maxiFilter volfilter, lpf, hpf;
 maxiDistortion dist;
@@ -30,18 +29,18 @@ double synth(
     //modified FM frequencies
     double modA = freq + mod1double*mod1ta + mod2double*mod2ta + mod3double*mod3ta;
     double modB = freq + mod1double*mod1tb + mod2double*mod2tb + mod3double*mod3tb;
-    //Oscillator 1
-    osc1.setFreq(modA);
-    osc1.setSinvol(sin1vol);
-    osc1.setTrivol(tri1vol);
-    osc1.setSqvol(sq1vol);
-    //Oscillator 2
-    osc2.setFreq(modB);
-    osc2.setSinvol(sin2vol);
-    osc2.setTrivol(tri2vol);
-    osc2.setSqvol(sq2vol);
-    //Combined oscillator output
-    double osc = (osc1.output() + osc2.output()) / 2;
+    //Oscillator A
+    double sine = osc1.sinewave(modA);
+    double tri = osc2.triangle(modA);
+    double sq = osc3.square(modA);
+    double osca = (sine * sin1vol + tri * tri1vol + sq * sq1vol) / (sin1vol + tri1vol + sq1vol + 0.00000001);
+    //Oscillator B
+    double sine2 = osc4.sinewave(modB);
+    double tri2 = osc5.triangle(modB);
+    double sq2 = osc6.square(modB);
+    double oscb = (sine2 * sin2vol + tri2 * tri2vol + sq2 * sq2vol) / (sin2vol + tri2vol + sq2vol + 0.00000001);
+    //Oscillator output
+    double osc = (osca + oscb) / 2;
     //Filters
     double f1osc = lpf.lores(osc, cutoff1, res1);
     double f2osc = hpf.hires(f1osc, cutoff2, res2);
@@ -95,5 +94,3 @@ void play(double *output) {
     output[1] = output[0];
     */
 }
-
-

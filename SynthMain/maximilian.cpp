@@ -364,6 +364,23 @@ double maxiOsc::triangle(double frequency) {
 	
 } 
 
+double synthOsc::output() {
+    return (sine.sinewave(freq) * sinvol + tri.triangle(freq) * trivol + sq.square(freq) * sqvol) / (sinvol + trivol + sqvol + 0.00000001);
+}
+
+void synthOsc::setSinvol(double vol) {
+    sinvol = vol;
+}
+void synthOsc::setTrivol(double vol) {
+    trivol = vol;
+}
+void synthOsc::setSqvol(double vol) {
+    sqvol = vol;
+}
+void synthOsc::setFreq(double frequency) {
+    freq = frequency;
+}
+
 // don't use this nonsense. Use ramps instead.
 // ..er... I mean "This method is deprecated"
 double maxiEnvelope::line(int numberofsegments,double segments[1000]) {
