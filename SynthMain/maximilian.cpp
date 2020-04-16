@@ -1596,9 +1596,16 @@ double maxiEnv::adsr(double input, double attack, double decay, double sustain, 
     // 0 < decay < 1 smaller = faster decay
     if (decayphase==1) {
         output=input*(amplitude*=decay);
-        if (amplitude<=sustain) {
-            decayphase=0;
-            holdphase=1;
+        if (trigger != 1)
+        {
+            holdcount = holdtime;
+            decayphase = 0;
+            holdphase = 1;
+        }
+        else if (amplitude <= sustain)
+        {
+            decayphase = 0;
+            holdphase = 1;
         }
     }
     
@@ -1633,7 +1640,7 @@ double maxiEnv::adsr(double input, int trigger) {
         releasephase=0;
         attackphase=1;
     }
-    // 0 < attack < 1 smaller = slower attack
+    
     if (attackphase==1) {
         releasephase=0;
         amplitude+=(1*attack);
@@ -1646,12 +1653,18 @@ double maxiEnv::adsr(double input, int trigger) {
         }
     }
     
-    // 0 < decay < 1 smaller = faster decay
     if (decayphase==1) {
         output=input*(amplitude*=decay);
-        if (amplitude<=sustain) {
-            decayphase=0;
-            holdphase=1;
+        if (trigger != 1)
+        {
+            holdcount = holdtime;
+            decayphase = 0;
+            holdphase = 1;
+        }
+        else if (amplitude <= sustain)
+        {
+            decayphase = 0;
+            holdphase = 1;
         }
     }
     

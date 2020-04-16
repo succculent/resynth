@@ -24,8 +24,7 @@ double synth(
     double locutoff, double lores, double hicutoff, double hires,
     double loA, double loD, double loS, double loR,
     double hiA, double hiD, double hiS, double hiR,
-             
-    
+    double volA, double volD, double volS, double volR
     ) {
     //carrier frequencies
     double mod1double = mod1.sinewave(mod1f)*mod1v;
@@ -62,14 +61,14 @@ double synth(
     double f1osc = lpf.lopass(osc,locutoff); //lpf.lores(osc, lobound, lores);
     double f2osc = hpf.hipass(osc,hicutoff); //hpf.hires(osc, hibound, hires);//might need to use f1osc instead of osc here
 
-    
-    //Volume Envelope
-    voladsr.setAttack(<#double attackMS#>)
+    //Volume envelope
+    voladsr.setAttack(volA);
+    voladsr.setDecay(volD);
+    voladsr.setSustain(volS);
+    voladsr.setRelease(volR);
     //OUTPUT
-    double out = f2osc;
-    
-    
-    return out;
+    double out = f2osc; //voladsr.adsr(f2osc);
+    return 0;
 }
 
 double counter = 0.0;
@@ -98,30 +97,36 @@ void play(double *output) {
     int mod2tb = 0;
     int mod3tb = 0;
     //filter envelopes
-    double loA = 1;
+    double loA = 0;
     double loD = 0;
     double loS = 1;
     double loR = 0;
-    double hiA = 1;
+    double hiA = 0;
     double hiD = 0;
     double hiS = 1;
     double hiR = 0;
     //filter cutoffs and resonances
-    double locutoff = 0;
+    double locutoff = 440;
     double lores = 1; //awtch out 1-?
     double hicutoff = 0;
     double hires = 1;
-
+    //volume envelope
+    double volA = 0;
+    double volD = 0;
+    double volS = 1;
+    double volR = 0;
+    
     output[0] = synth(sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
                     mod1f, mod1v, mod2f, mod2v, mod3f, mod3v,
                     mod1ta, mod2ta, mod3ta, mod1tb, mod2tb, mod3tb,
                     locutoff, lores, hicutoff, hires,
                     loA, loD, loS, loR,
-                    hiA, hiD, hiS, hiR
+                    hiA, hiD, hiS, hiR,
+                    volA, volD, volS, volR
                     );
     output[1] = output[0];
-
+     
     /*
     countIndex = myCounter.phasor(1, 0, 9);
 
