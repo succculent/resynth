@@ -23,7 +23,9 @@ double synth(
     int mod1ta, int mod2ta, int mod3ta, int mod1tb, int mod2tb, int mod3tb, //0 if off 1 if on
     double locutoff, double lores, double hicutoff, double hires,
     double loA, double loD, double loS, double loR,
-    double hiA, double hiD, double hiS, double hiR
+    double hiA, double hiD, double hiS, double hiR,
+             
+    
     ) {
     //carrier frequencies
     double mod1double = mod1.sinewave(mod1f)*mod1v;
@@ -57,18 +59,23 @@ double synth(
     hpfadsr.setRelease(hiR);
     double hibound = hpfadsr.adsr(hicutoff);
     //Filters
-    double f1osc = lpf.lores(osc, lobound, lores);
-    double f2osc = hpf.hires(osc, hibound, hires);//might need to use f1osc instead of osc here
+    double f1osc = lpf.lopass(osc,locutoff); //lpf.lores(osc, lobound, lores);
+    double f2osc = hpf.hipass(osc,hicutoff); //hpf.hires(osc, hibound, hires);//might need to use f1osc instead of osc here
 
+    
+    //Volume Envelope
+    voladsr.setAttack(<#double attackMS#>)
     //OUTPUT
     double out = f2osc;
+    
+    
     return out;
 }
 
 double counter = 0.0;
 
 void play(double *output) {
-    counter += 0.00001;
+    counter += 0.001;
     //volumes of waveforms on 2 oscillators
     double sin1vol = 1;
     double tri1vol = 0;
@@ -77,10 +84,10 @@ void play(double *output) {
     double tri2vol = 0;
     double sq2vol = 0;
     //modulation frequencies and amounts
-    double mod1f = 1;
+    double mod1f = 0.5;
     double mod2f = 0;
     double mod3f = 0;
-    double mod1v = 100;
+    double mod1v = 400;
     double mod2v = 0;
     double mod3v = 0;
     //enables for fm
@@ -101,9 +108,9 @@ void play(double *output) {
     double hiR = 0;
     //filter cutoffs and resonances
     double locutoff = 0;
-    double lores = 0; //awtch out 1-?
+    double lores = 1; //awtch out 1-?
     double hicutoff = 0;
-    double hires = 0;
+    double hires = 1;
 
     output[0] = synth(sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
