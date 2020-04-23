@@ -1,4 +1,5 @@
 #include "maximilian.h"
+#include "AudioFile.h"
 
 maxiOsc osc1, osc2, osc3, osc4, osc5, osc6, mod1, mod2, mod3;
 maxiEnv voladsr, lpfadsr, hpfadsr;
@@ -13,11 +14,18 @@ void setup() {//some inits
     
 }
 
-int sampleLength = 4000;
-double * extractedSample0 = (double*) malloc(sampleLength * sizeof(double));
-double * extractedSample1 = (double*) malloc(sampleLength * sizeof(double));
+int sampleLength = 8000;
+//double * extractedSample0 = (double*) malloc(sampleLength * sizeof(double));
+//double * extractedSample1 = (double*) malloc(sampleLength * sizeof(double));
+AudioFile<double> audioFile; 
+AudioFile<double>::AudioBuffer buffer();
+buffer.resize(2);
+buffer[0].resize(sampleLength);
+buffer[1].resize(sampleLength);
+
 int extractCounter = 0;
 int extractFlag = 1;
+int wavFlag = 1;
 
 double synth(
 	double sin1vol, double tri1vol, double sq1vol,
@@ -61,6 +69,17 @@ void play(double *output) {
     if (extractCounter >= sampleLength) {
     	extractFlag = 0;
     }
+    if (!extractFlag && wavFlag) {
+	wavFlag = 0;
+	audioFile.setAudioBuffer(buffer);
+	audioFile.setAudioBufferSize(2, sampleLength);
+	//audioFile.setNumSamplesPerChannel(sampleLength);
+	//audioFile.setNumChannels(2);
+	audioFile.setBitDepth(16);
+	audioFile.setSampleRate(44100);
+	audioFile.save("output.wav");
+	cout << "Saved WAV file" << endl;
+    } 
     double sin1vol = 1;
     double tri1vol = 0;
     double sq1vol = 0;
@@ -91,8 +110,8 @@ void play(double *output) {
 					cutoff1, res1, cutoff2, res2);
     output[1] = output[0];
     if (extractFlag) {
-    	extractedSample0[extractCounter] = output[0];
-    	extractedSample1[extractCounter] = output[1];
+    	buffer[0][extractCounter] = output[0];
+    	buffer[1][extractCounter] = output[1];
     }
     /*
     countIndex = myCounter.phasor(1, 0, 9);
