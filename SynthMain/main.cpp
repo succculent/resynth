@@ -79,11 +79,11 @@ maxiFilter myFilter, anotherFilter;
 int frequencies[10] = {100,200,300,400,500,600,700,800,900,1000};
 
 void play(double *output) {
-    /*
+    
     counter = myCounter.phasor(0.3, 1, 4);
     counter2 = myOsc.phasor(counter, 12,16);
     //volumes of waveforms on 2 oscillators
-    double sin1vol = counter2;
+    double sin1vol = 10;
     double tri1vol = 0;
     double sq1vol = 3;
     double sin2vol = 0;
@@ -95,7 +95,7 @@ void play(double *output) {
     double mod3f = counter;
     double mod1v = 20;
     double mod2v = 10;
-    double mod3v = 130;
+    double mod3v = 140;
     //enables for fm
     int mod1ta = 1;
     int mod2ta = 1;
@@ -114,7 +114,7 @@ void play(double *output) {
     double hiR = 0; //in ms
     //filter cutoffs and resonances
     double locutoff = 200;
-    double lores = 5; //awtch out 1-?
+    double lores = 10; //awtch out 1-?
     double hicutoff = 0;
     double hires = 1;
     //volume envelope
@@ -133,7 +133,7 @@ void play(double *output) {
                     volA, volD, volS, volR
                     );
     output[1] = output[0];
-    */
+    
     
     /*
     counter = myCounter.phasor(1, 0, 9);
