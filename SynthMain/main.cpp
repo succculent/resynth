@@ -68,7 +68,7 @@ double synth(
     voladsr.setRelease(volR);
     //OUTPUT
     double out = f2osc; //voladsr.adsr(f2osc);
-    return 0;
+    return out;
 }
 
 double counter = 0.0;
@@ -98,13 +98,13 @@ void play(double *output) {
     int mod3tb = 0;
     //filter envelopes
     double loA = 0;
-    double loD = 0;
+    double loD = 1; //needs to be at least 1
     double loS = 1;
-    double loR = 0;
+    double loR = 0; //in ms
     double hiA = 0;
-    double hiD = 0;
+    double hiD = 1; //needs to be at least 1
     double hiS = 1;
-    double hiR = 0;
+    double hiR = 0; //in ms
     //filter cutoffs and resonances
     double locutoff = 440;
     double lores = 1; //awtch out 1-?
@@ -115,7 +115,7 @@ void play(double *output) {
     double volD = 0;
     double volS = 1;
     double volR = 0;
-    
+
     output[0] = synth(sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
                     mod1f, mod1v, mod2f, mod2v, mod3f, mod3v,
@@ -126,7 +126,7 @@ void play(double *output) {
                     volA, volD, volS, volR
                     );
     output[1] = output[0];
-     
+
     /*
     countIndex = myCounter.phasor(1, 0, 9);
 
