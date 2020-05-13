@@ -8,7 +8,7 @@ maxiDistortion dist;
 maxiFlanger flang;
 maxiChorus chorus;
 
-int freq = 440;
+int freq = 200;
 
 
 
@@ -58,7 +58,7 @@ double synth(
     hpfadsr.setRelease(hiR);
     double hibound = hpfadsr.adsr(hicutoff);
     //Filters
-    double f1osc = lpf.lopass(osc,locutoff); //lpf.lores(osc, lobound, lores);
+    double f1osc = lpf.lores(osc, lobound, lores);//lpf.lopass(osc,locutoff);
     double f2osc = hpf.hipass(osc,hicutoff); //hpf.hires(osc, hibound, hires);//might need to use f1osc instead of osc here
 
     //Volume envelope
@@ -67,32 +67,39 @@ double synth(
     voladsr.setSustain(volS);
     voladsr.setRelease(volR);
     //OUTPUT
-    double out = f2osc; //voladsr.adsr(f2osc);
-    return out;
+    double out = f1osc; //voladsr.adsr(f2osc);
+    return out*100;
 }
 
-double counter = 0.0;
+int counter = 0;
+int counter2 = 0;
+double myOscOutput = 0;
+maxiOsc myCounter, myOsc, myCutoff;
+maxiFilter myFilter, anotherFilter;
+int frequencies[10] = {100,200,300,400,500,600,700,800,900,1000};
 
 void play(double *output) {
-    counter += 0.001;
+    /*
+    counter = myCounter.phasor(0.3, 1, 4);
+    counter2 = myOsc.phasor(counter, 12,16);
     //volumes of waveforms on 2 oscillators
-    double sin1vol = 1;
+    double sin1vol = counter2;
     double tri1vol = 0;
-    double sq1vol = 0;
+    double sq1vol = 3;
     double sin2vol = 0;
     double tri2vol = 0;
     double sq2vol = 0;
     //modulation frequencies and amounts
     double mod1f = 0.5;
-    double mod2f = 0;
-    double mod3f = 0;
-    double mod1v = 400;
-    double mod2v = 0;
-    double mod3v = 0;
+    double mod2f = 30;
+    double mod3f = counter;
+    double mod1v = 20;
+    double mod2v = 10;
+    double mod3v = 130;
     //enables for fm
     int mod1ta = 1;
-    int mod2ta = 0;
-    int mod3ta = 0;
+    int mod2ta = 1;
+    int mod3ta = 1;
     int mod1tb = 0;
     int mod2tb = 0;
     int mod3tb = 0;
@@ -106,8 +113,8 @@ void play(double *output) {
     double hiS = 1;
     double hiR = 0; //in ms
     //filter cutoffs and resonances
-    double locutoff = 440;
-    double lores = 1; //awtch out 1-?
+    double locutoff = 200;
+    double lores = 5; //awtch out 1-?
     double hicutoff = 0;
     double hires = 1;
     //volume envelope
@@ -115,7 +122,7 @@ void play(double *output) {
     double volD = 0;
     double volS = 1;
     double volR = 0;
-
+    
     output[0] = synth(sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
                     mod1f, mod1v, mod2f, mod2v, mod3f, mod3v,
@@ -126,13 +133,14 @@ void play(double *output) {
                     volA, volD, volS, volR
                     );
     output[1] = output[0];
-
+    */
+    
     /*
-    countIndex = myCounter.phasor(1, 0, 9);
-
-    myOscOutput = myOsc.sawn(anotherFilter.lopass(frequencies[countIndex], 0.001));
-
-    output[0] = myFilter.lopass(myOscOutput, myCutoff.phasor(0.1, 0.01, 0.5));
+    counter = myCounter.phasor(1, 0, 9);
+    
+    myOscOutput = myOsc.sawn(anotherFilter.lopass(frequencies[counter], 0.001));
+    
+    output[0] = myFilter.lopass(myOscOutput, myCutoff.phasor(0.1, 0.01, 1.5));
 
     output[1] = output[0];
     */
