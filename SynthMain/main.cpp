@@ -58,48 +58,40 @@ double synth(
     hpfadsr.setRelease(hiR);
     double hibound = hpfadsr.adsr(hicutoff);
     //Filters
-    double f1osc = lpf.lores(osc, lobound, lores);//lpf.lopass(osc,locutoff);
-    double f2osc = hpf.hipass(osc,hicutoff); //hpf.hires(osc, hibound, hires);//might need to use f1osc instead of osc here
+    double f1osc = lpf.lores(osc, lobound, lores);
+    double f2osc = hpf.hires(osc, hibound, hires);
 
     //Volume envelope
     voladsr.setAttack(volA);
     voladsr.setDecay(volD);
     voladsr.setSustain(volS);
     voladsr.setRelease(volR);
+    
     //OUTPUT
     double out = f1osc; //voladsr.adsr(f2osc);
-    return out*100;
+    return out;
 }
-
-int counter = 0;
-int counter2 = 0;
-double myOscOutput = 0;
-maxiOsc myCounter, myOsc, myCutoff;
-maxiFilter myFilter, anotherFilter;
-int frequencies[10] = {100,200,300,400,500,600,700,800,900,1000};
 
 void play(double *output) {
     
-    counter = myCounter.phasor(0.3, 1, 4);
-    counter2 = myOsc.phasor(counter, 12,16);
     //volumes of waveforms on 2 oscillators
-    double sin1vol = 10;
+    double sin1vol = 1;
     double tri1vol = 0;
-    double sq1vol = 3;
+    double sq1vol = 0;
     double sin2vol = 0;
     double tri2vol = 0;
     double sq2vol = 0;
     //modulation frequencies and amounts
-    double mod1f = 0.5;
-    double mod2f = 30;
-    double mod3f = counter;
-    double mod1v = 20;
-    double mod2v = 10;
-    double mod3v = 140;
+    double mod1f = 0;
+    double mod2f = 0;
+    double mod3f = 0;
+    double mod1v = 0;
+    double mod2v = 0;
+    double mod3v = 0;
     //enables for fm
-    int mod1ta = 1;
-    int mod2ta = 1;
-    int mod3ta = 1;
+    int mod1ta = 0;
+    int mod2ta = 0;
+    int mod3ta = 0;
     int mod1tb = 0;
     int mod2tb = 0;
     int mod3tb = 0;
@@ -119,9 +111,15 @@ void play(double *output) {
     double hires = 1;
     //volume envelope
     double volA = 0;
-    double volD = 0;
+    double volD = 1; //needs to be at least 1
     double volS = 1;
     double volR = 0;
+
+    CurrentCount=myCounter.phasor(1, 1, 9); //basically just a counter
+
+    if (CurrentCount==1) myEnvelope.trigger=1; //trigger the envelope
+
+    else myEnvelope.trigger=0;//release the envelope to make it fade out only if it's been triggered
     
     output[0] = synth(sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
@@ -133,13 +131,12 @@ void play(double *output) {
                     volA, volD, volS, volR
                     );
     output[1] = output[0];
-    
-    
+
     /*
     counter = myCounter.phasor(1, 0, 9);
-    
+
     myOscOutput = myOsc.sawn(anotherFilter.lopass(frequencies[counter], 0.001));
-    
+
     output[0] = myFilter.lopass(myOscOutput, myCutoff.phasor(0.1, 0.01, 1.5));
 
     output[1] = output[0];
