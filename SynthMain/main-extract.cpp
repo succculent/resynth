@@ -1,5 +1,5 @@
 #include "maximilian.h"
-#include "AudioFile.h"
+#include <iostream>
 
 maxiOsc osc1, osc2, osc3, osc4, osc5, osc6, mod1, mod2, mod3;
 maxiEnv voladsr, lpfadsr, hpfadsr;
@@ -15,13 +15,10 @@ void setup() {//some inits
 }
 
 int sampleLength = 8000;
-//double * extractedSample0 = (double*) malloc(sampleLength * sizeof(double));
-//double * extractedSample1 = (double*) malloc(sampleLength * sizeof(double));
-AudioFile<double> audioFile; 
-AudioFile<double>::AudioBuffer buffer();
-buffer.resize(2);
-buffer[0].resize(sampleLength);
-buffer[1].resize(sampleLength);
+double * extractedSample0 = (double*) malloc(sampleLength * sizeof(double));
+double * extractedSample1 = (double*) malloc(sampleLength * sizeof(double));
+
+ofstream csvFile ("programOutput.csv");
 
 int extractCounter = 0;
 int extractFlag = 1;
@@ -71,14 +68,19 @@ void play(double *output) {
     }
     if (!extractFlag && wavFlag) {
 	wavFlag = 0;
-	audioFile.setAudioBuffer(buffer);
-	audioFile.setAudioBufferSize(2, sampleLength);
-	//audioFile.setNumSamplesPerChannel(sampleLength);
-	//audioFile.setNumChannels(2);
-	audioFile.setBitDepth(16);
-	audioFile.setSampleRate(44100);
-	audioFile.save("output.wav");
-	cout << "Saved WAV file" << endl;
+	for(int i = 0; i < sampleLength-1; i++) {
+	    csvFile << extractedSample0[i] << ',';
+	}
+	csvFile << extractedSample0[sampleLength-1] << endl;
+
+	for(int i = 0; i < sampleLength-1; i++) {
+	    csvFile << extractedSample1[i] << ',';
+	}
+	csvFile << extractedSample1[sampleLength-1] << endl;
+
+	csvFile.close();
+
+	cout << "saved csv" << endl;
     } 
     double sin1vol = 1;
     double tri1vol = 0;
@@ -110,8 +112,8 @@ void play(double *output) {
 					cutoff1, res1, cutoff2, res2);
     output[1] = output[0];
     if (extractFlag) {
-    	buffer[0][extractCounter] = output[0];
-    	buffer[1][extractCounter] = output[1];
+    	extractedSample0[extractCounter] = output[0];
+    	extractedSample1[extractCounter] = output[1];
     }
     /*
     countIndex = myCounter.phasor(1, 0, 9);
