@@ -27,12 +27,12 @@ double synth(
     double volA, double volD, double volS, double volR
     ) {
 
-    //carrier frequencies
+    //modulation frequencies
     double mod1val = mod1.sinewave(mod1freq)*mod1amt;
     double mod2val = mod2.sinewave(mod2freq)*mod2amt;
     double mod3val = mod3.sinewave(mod3freq)*mod3amt;
     
-    //modified FM frequencies
+    //modulated carrier frequencies
     double modA = freq + mod1val*mod1aEnable + mod2val*mod2aEnable + mod3val*mod3aEnable;
     double modB = freq + mod1val*mod1bEnable + mod2val*mod2bEnable + mod3val*mod3bEnable;
     
@@ -99,10 +99,11 @@ double synth(
 
 maxiOsc counter;
 void play(double *output) {
+
 /*
  TESTING SETUP
  */
-    int freq = 440;
+    int freq = 200;
     int trigger = counter.phasor(1, 1, 9); //test counter in place of MIDI input
 /*
  OSCILLATORS
@@ -118,12 +119,12 @@ void play(double *output) {
  FM
  */
     //modulation frequencies and amounts in Hz
-    double mod1freq = 0;
-    double mod2freq = 0;
+    double mod1freq = 0.3;
+    double mod2freq = 3;
     double mod3freq = 0;
-    double mod1amt = 0;
-    double mod2amt = 0;
-    double mod3amt = 0;
+    double mod1amt = 1;
+    double mod2amt = 1;
+    double mod3amt = 1;
     //enables for fm
     int mod1aEnable = 0;
     int mod2aEnable = 0;
@@ -177,4 +178,8 @@ void play(double *output) {
                     );
     //right speaker
     output[1] = output[0];
+
+// output[0]=mod1.sinewave(mod2.sinewave(mod3.sinewave(0.3)*30)*200);//awesome bassline
+// output[1]=output[0];
+
 }
