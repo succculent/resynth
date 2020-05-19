@@ -16,8 +16,8 @@ double synth(
     int trigger, int freq,
     double sin1vol, double tri1vol, double sq1vol,
     double sin2vol, double tri2vol, double sq2vol,
-    double mod1freq, double mod1amt, double mod2freq,
-    double mod2amt, double mod3freq, double mod3amt,
+    double mod1afreq, double mod1bfreq, double mod2afreq,
+    double mod2bfreq, double mod3afreq, double mod3bfreq,
     int mod1aEnable, int mod2aEnable, int mod3aEnable,
     int mod1bEnable, int mod2bEnable, int mod3bEnable,
     double loCutoff, double loRes, int loEnable,
@@ -28,12 +28,12 @@ double synth(
     ) {
 
     //modulation frequencies
-    double mod1val = mod1.sinewave(mod1freq)*mod1amt;
-    double mod2val = mod2.sinewave(mod2freq)*mod2amt;
-    double mod3val = mod3.sinewave(mod3freq)*mod3amt;
+    double mod3val = mod3.sinewave(mod3afreq);
+    double mod2val = mod2.sinewave(mod3val*mod2afreq);
+    double mod1val = mod1.sinewave(mod2val*mod1afreq);
     
     //modulated carrier frequencies
-    double modA = freq + mod1val*mod1aEnable + mod2val*mod2aEnable + mod3val*mod3aEnable;
+    double modA = freq+freq*mod1val;
     double modB = freq + mod1val*mod1bEnable + mod2val*mod2bEnable + mod3val*mod3bEnable;
     
     //Oscillator 1
@@ -80,10 +80,12 @@ double synth(
         hpfadsr.setDecay(hiD);
         hpfadsr.setSustain(hiS);
         hpfadsr.setRelease(hiR);
-        double hibound = freq*5-(freq*5-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... needs some work
-        f2osc = hpf.hires(f1osc, hibound, hiRes);
+        double hibound = 22500-(22500-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... needs some work
+        f2osc = hpf.hires(osc, hibound, hiRes);
     }
-    else f2osc = f1osc;
+    else f2osc = osc;
+    //try mutually recursive filters?
+    double fosc = (f1osc+f2osc)/2;
     
     //Volume envelope
     voladsr.setAttack(volA);
@@ -93,7 +95,7 @@ double synth(
     double volume = voladsr.adsr(1.,voladsr.trigger);
 
     //Output
-    double output = volume*f2osc;
+    double output = fosc;
     return output;
 }
 
@@ -103,7 +105,7 @@ void play(double *output) {
 /*
  TESTING SETUP
  */
-    int freq = 200;
+    int freq = 440;
     int trigger = counter.phasor(1, 1, 9); //test counter in place of MIDI input
 /*
  OSCILLATORS
@@ -119,12 +121,12 @@ void play(double *output) {
  FM
  */
     //modulation frequencies and amounts in Hz
-    double mod1freq = 0.3;
-    double mod2freq = 3;
-    double mod3freq = 0;
-    double mod1amt = 1;
-    double mod2amt = 1;
-    double mod3amt = 1;
+    double mod1afreq = 10;
+    double mod2afreq = 30;
+    double mod3afreq = 0.3;
+    double mod1bfreq = 0;
+    double mod2bfreq = 0;
+    double mod3bfreq = 0;
     //enables for fm
     int mod1aEnable = 0;
     int mod2aEnable = 0;
@@ -166,8 +168,8 @@ void play(double *output) {
     output[0] = synth(trigger, freq,
                     sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
-                    mod1freq, mod1amt, mod2freq,
-                    mod2amt, mod3freq, mod3amt,
+                    mod1afreq, mod1bfreq, mod2afreq,
+                    mod2bfreq, mod3afreq, mod3bfreq,
                     mod1aEnable, mod2aEnable, mod3aEnable,
                     mod1bEnable, mod2bEnable, mod3bEnable,
                     loCutoff, loRes, loEnable,
