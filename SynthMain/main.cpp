@@ -13,9 +13,9 @@ void setup() {
 }
 
 double synth(
-    int trigger, int freq,
-    double sin1vol, double tri1vol, double sq1vol,
-    double sin2vol, double tri2vol, double sq2vol,
+    int trigger, int freq, int detune,
+    double sinAvol, double triAvol, double sqAvol,
+    double sinBvol, double triBvol, double sqBvol,
     double mod1Afreq, double mod1Bfreq, double mod2Afreq,
     double mod2Bfreq, double mod3Afreq, double mod3Bfreq,
     int mod1AEnable, int mod2AEnable, int mod3AEnable,
@@ -26,6 +26,9 @@ double synth(
     double hiA, double hiD, double hiS, double hiR,
     double volA, double volD, double volS, double volR
     ) {
+    
+    double detuned_freq = exp(log(freq)+detune*log(2)/1200);
+    
     double mod3val;
     double mod2val;
     double mod1val;
@@ -51,19 +54,19 @@ double synth(
     if(mod1BEnable) mod1val = mod1.sinewave(mod2val*mod1Bfreq);
     else mod1val = 1;
     
-    double modB = freq + freq*mod1val;
+    double modB = detuned_freq + detuned_freq*mod1val;
     
     //Oscillator A
     oscA.setFreq(modA);
-    oscA.setSinvol(sin1vol);
-    oscA.setTrivol(tri1vol);
-    oscA.setSqvol(sq1vol);
+    oscA.setSinvol(sinAvol);
+    oscA.setTrivol(triAvol);
+    oscA.setSqvol(sqAvol);
     
     //Oscillator B
     oscB.setFreq(modB);
-    oscB.setSinvol(sin2vol);
-    oscB.setTrivol(tri2vol);
-    oscB.setSqvol(sq2vol);
+    oscB.setSinvol(sinBvol);
+    oscB.setTrivol(triBvol);
+    oscB.setSqvol(sqBvol);
     //Combined oscillator output
     double osc = (oscA.output() + oscB.output()) / 2;
 
@@ -129,12 +132,14 @@ void play(double *output) {
  OSCILLATORS
  */
     //volumes of waveforms on 2 oscillators
-    double sin1vol = 1;
-    double tri1vol = 0;
-    double sq1vol = 0;
-    double sin2vol = 0;
-    double tri2vol = 0;
-    double sq2vol = 0;
+    double sinAvol = 1;
+    double triAvol = 0;
+    double sqAvol = 0;
+    double sinBvol = 0;
+    double triBvol = 1;
+    double sqBvol = 0;
+    //detune oscillator B, input in cents
+    int detune = 10;
 /*
  FM
  */
@@ -183,9 +188,9 @@ void play(double *output) {
     double volR = 1000;
 
     //left speaker
-    output[0] = synth(trigger, freq,
-                    sin1vol, tri1vol, sq1vol,
-                    sin2vol, tri2vol, sq2vol,
+    output[0] = synth(trigger, freq, detune,
+                    sinAvol, triAvol, sqAvol,
+                    sinBvol, triBvol, sqBvol,
                     mod1Afreq, mod1Bfreq, mod2Afreq,
                     mod2Bfreq, mod3Afreq, mod3Bfreq,
                     mod1AEnable, mod2AEnable, mod3AEnable,
