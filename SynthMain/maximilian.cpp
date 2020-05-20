@@ -1627,7 +1627,7 @@ double maxiEnv::adsr(double input, double attack, double decay, double sustain, 
         
     }
     
-    return output;
+    return output/0.901; //scaled 0-1
 }
 
 double maxiEnv::adsr(double input, int trigger) {
@@ -1686,7 +1686,7 @@ double maxiEnv::adsr(double input, int trigger) {
         
     }
     
-    return output;
+    return output/0.901; //scaled 0-1
 }
 
 

@@ -1,7 +1,7 @@
 #include "maximilian.h"
 
 maxiOsc mod1, mod2, mod3;
-synthOsc osc1, osc2;
+synthOsc oscA, oscB;
 maxiEnv voladsr, lpfadsr, hpfadsr;
 maxiFilter volfilter, lpf, hpf;
 maxiDistortion dist;
@@ -16,39 +16,56 @@ double synth(
     int trigger, int freq,
     double sin1vol, double tri1vol, double sq1vol,
     double sin2vol, double tri2vol, double sq2vol,
-    double mod1afreq, double mod1bfreq, double mod2afreq,
-    double mod2bfreq, double mod3afreq, double mod3bfreq,
-    int mod1aEnable, int mod2aEnable, int mod3aEnable,
-    int mod1bEnable, int mod2bEnable, int mod3bEnable,
+    double mod1Afreq, double mod1Bfreq, double mod2Afreq,
+    double mod2Bfreq, double mod3Afreq, double mod3Bfreq,
+    int mod1AEnable, int mod2AEnable, int mod3AEnable,
+    int mod1BEnable, int mod2BEnable, int mod3BEnable,
     double loCutoff, double loRes, int loEnable,
     double hiCutoff, double hiRes, int hiEnable,
     double loA, double loD, double loS, double loR,
     double hiA, double hiD, double hiS, double hiR,
     double volA, double volD, double volS, double volR
     ) {
-
-    //modulation frequencies
-    double mod3val = mod3.sinewave(mod3afreq);
-    double mod2val = mod2.sinewave(mod3val*mod2afreq);
-    double mod1val = mod1.sinewave(mod2val*mod1afreq);
+    double mod3val;
+    double mod2val;
+    double mod1val;
+    //modulation frequencies for Oscillator A
+    if(mod3AEnable) mod3val = mod3.sinewave(mod3Afreq);
+    else mod3val = 1;
     
-    //modulated carrier frequencies
-    double modA = freq+freq*mod1val;
-    double modB = freq + mod1val*mod1bEnable + mod2val*mod2bEnable + mod3val*mod3bEnable;
+    if(mod2AEnable) mod2val = mod2.sinewave(mod3val*mod2Afreq);
+    else mod2val = 1;
     
-    //Oscillator 1
-    osc1.setFreq(modA);
-    osc1.setSinvol(sin1vol);
-    osc1.setTrivol(tri1vol);
-    osc1.setSqvol(sq1vol);
+    if(mod1AEnable) mod1val = mod1.sinewave(mod2val*mod1Afreq);
+    else mod1val = 1;
     
-    //Oscillator 2
-    osc2.setFreq(modB);
-    osc2.setSinvol(sin2vol);
-    osc2.setTrivol(tri2vol);
-    osc2.setSqvol(sq2vol);
+    double modA = freq + freq*mod1val;
+    
+    //modulation frequencies for Oscillator B
+    if(mod3BEnable) mod3val = mod3.sinewave(mod3Bfreq);
+    else mod3val = 1;
+    
+    if(mod2BEnable) mod2val = mod2.sinewave(mod3val*mod2Bfreq);
+    else mod2val = 1;
+    
+    if(mod1BEnable) mod1val = mod1.sinewave(mod2val*mod1Bfreq);
+    else mod1val = 1;
+    
+    double modB = freq + freq*mod1val;
+    
+    //Oscillator A
+    oscA.setFreq(modA);
+    oscA.setSinvol(sin1vol);
+    oscA.setTrivol(tri1vol);
+    oscA.setSqvol(sq1vol);
+    
+    //Oscillator B
+    oscB.setFreq(modB);
+    oscB.setSinvol(sin2vol);
+    oscB.setTrivol(tri2vol);
+    oscB.setSqvol(sq2vol);
     //Combined oscillator output
-    double osc = (osc1.output() + osc2.output()) / 2;
+    double osc = (oscA.output() + oscB.output()) / 2;
 
     if (trigger == 1) { //trigger the envelopes
         lpfadsr.trigger=1;
@@ -80,11 +97,12 @@ double synth(
         hpfadsr.setDecay(hiD);
         hpfadsr.setSustain(hiS);
         hpfadsr.setRelease(hiR);
-        double hibound = 22500-(22500-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... needs some work
+        double hibound = maxiSettings::sampleRate*0.5-(maxiSettings::sampleRate*0.5-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... might need some work
+        
         f2osc = hpf.hires(osc, hibound, hiRes);
     }
     else f2osc = osc;
-    //try mutually recursive filters?
+    //try mutually recursive filters instead of average?
     double fosc = (f1osc+f2osc)/2;
     
     //Volume envelope
@@ -93,9 +111,8 @@ double synth(
     voladsr.setSustain(volS);
     voladsr.setRelease(volR);
     double volume = voladsr.adsr(1.,voladsr.trigger);
-
     //Output
-    double output = fosc;
+    double output = fosc*volume;
     return output;
 }
 
@@ -121,19 +138,19 @@ void play(double *output) {
  FM
  */
     //modulation frequencies and amounts in Hz
-    double mod1afreq = 10;
-    double mod2afreq = 30;
-    double mod3afreq = 0.3;
-    double mod1bfreq = 0;
-    double mod2bfreq = 0;
-    double mod3bfreq = 0;
+    double mod1Afreq = 10;
+    double mod2Afreq = 30;
+    double mod3Afreq = 0.3;
+    double mod1Bfreq = 0;
+    double mod2Bfreq = 0;
+    double mod3Bfreq = 0;
     //enables for fm
-    int mod1aEnable = 0;
-    int mod2aEnable = 0;
-    int mod3aEnable = 0;
-    int mod1bEnable = 0;
-    int mod2bEnable = 0;
-    int mod3bEnable = 0;
+    int mod1AEnable = 0;
+    int mod2AEnable = 0;
+    int mod3AEnable = 0;
+    int mod1BEnable = 0;
+    int mod2BEnable = 0;
+    int mod3BEnable = 0;
 /*
  FILTERS
  */
@@ -148,12 +165,12 @@ void play(double *output) {
     double hiS = 1;
     double hiR = 1000;
     //filter cutoffs, resonances, and enables
-    double loCutoff = 2000;
+    double loCutoff = 300;
     double loRes = 10; //awtch out 1-?
     int loEnable = 0;
-    double hiCutoff = 0;
+    double hiCutoff = 500;
     double hiRes = 10;
-    int hiEnable = 0;
+    int hiEnable = 1;
 /*
  VOLUME
  */
@@ -168,10 +185,10 @@ void play(double *output) {
     output[0] = synth(trigger, freq,
                     sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
-                    mod1afreq, mod1bfreq, mod2afreq,
-                    mod2bfreq, mod3afreq, mod3bfreq,
-                    mod1aEnable, mod2aEnable, mod3aEnable,
-                    mod1bEnable, mod2bEnable, mod3bEnable,
+                    mod1Afreq, mod1Bfreq, mod2Afreq,
+                    mod2Bfreq, mod3Afreq, mod3Bfreq,
+                    mod1AEnable, mod2AEnable, mod3AEnable,
+                    mod1BEnable, mod2BEnable, mod3BEnable,
                     loCutoff, loRes, loEnable,
                     hiCutoff, hiRes, hiEnable,
                     loA, loD, loS, loR,
