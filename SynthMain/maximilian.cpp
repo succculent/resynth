@@ -1580,7 +1580,7 @@ double maxiEnv::adsr(double input, double attack, double decay, double sustain, 
         releasephase=0;
         attackphase=1;
     }
-    // 0 < attack < 1 smaller = slower attack
+    
     if (attackphase==1) {
         releasephase=0;
         amplitude+=(1*attack);
@@ -1593,7 +1593,6 @@ double maxiEnv::adsr(double input, double attack, double decay, double sustain, 
         }
     }
     
-    // 0 < decay < 1 smaller = faster decay
     if (decayphase==1) {
         output=input*(amplitude*=decay);
         if (trigger != 1)

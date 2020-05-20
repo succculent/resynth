@@ -14,7 +14,7 @@
 //void setup() {//some inits
 //
 //    //Timing is in ms
-//    
+//
 //    myEnvelope.setAttack(0);
 //    myEnvelope.setDecay(1);  // Needs to be at least 1
 //    myEnvelope.setSustain(1);
@@ -35,13 +35,13 @@
 //
 //    else myEnvelope.trigger=0;//release the envelope to make it fade out only if it's been triggered
 //
-//    myOscOutput=mySwitchableOsc.sawn(100);
+//    myOscOutput=mySwitchableOsc.sinewave(400);
 //
 //    // Below, the oscilator signals are being passed through a low pass filter.
 //    // The middle input is the filter cutoff. It is being controlled by the envelope.
 //    // Notice that the envelope is being amplified so that it scales between 0 and 1000.
 //    // The last input is the resonance.
-//    myFilteredOutput=myFilter.lores(myOscOutput,myCurrentVolume*1000,10);
+//    myFilteredOutput=myFilter.hires(myOscOutput,4000-(myCurrentVolume*4000),1);
 //
 //    output[0]=myFilteredOutput;//left speaker
 //    output[1]=output[0];

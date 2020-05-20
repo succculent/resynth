@@ -8,36 +8,40 @@ maxiDistortion dist;
 maxiFlanger flang;
 maxiChorus chorus;
 
-int freq = 200;
-
-
-
-void setup() {//some inits
+void setup() {
 
 }
 
 double synth(
+    int trigger, int freq,
     double sin1vol, double tri1vol, double sq1vol,
     double sin2vol, double tri2vol, double sq2vol,
-    double mod1f, double mod1v, double mod2f, double mod2v, double mod3f, double mod3v,
-    int mod1ta, int mod2ta, int mod3ta, int mod1tb, int mod2tb, int mod3tb, //0 if off 1 if on
-    double locutoff, double lores, double hicutoff, double hires,
+    double mod1afreq, double mod1bfreq, double mod2afreq,
+    double mod2bfreq, double mod3afreq, double mod3bfreq,
+    int mod1aEnable, int mod2aEnable, int mod3aEnable,
+    int mod1bEnable, int mod2bEnable, int mod3bEnable,
+    double loCutoff, double loRes, int loEnable,
+    double hiCutoff, double hiRes, int hiEnable,
     double loA, double loD, double loS, double loR,
     double hiA, double hiD, double hiS, double hiR,
     double volA, double volD, double volS, double volR
     ) {
-    //carrier frequencies
-    double mod1double = mod1.sinewave(mod1f)*mod1v;
-    double mod2double = mod2.sinewave(mod2f)*mod2v;
-    double mod3double = mod3.sinewave(mod3f)*mod3v;
-    //modified FM frequencies
-    double modA = freq + mod1double*mod1ta + mod2double*mod2ta + mod3double*mod3ta;
-    double modB = freq + mod1double*mod1tb + mod2double*mod2tb + mod3double*mod3tb;
+
+    //modulation frequencies
+    double mod3val = mod3.sinewave(mod3afreq);
+    double mod2val = mod2.sinewave(mod3val*mod2afreq);
+    double mod1val = mod1.sinewave(mod2val*mod1afreq);
+    
+    //modulated carrier frequencies
+    double modA = freq+freq*mod1val;
+    double modB = freq + mod1val*mod1bEnable + mod2val*mod2bEnable + mod3val*mod3bEnable;
+    
     //Oscillator 1
     osc1.setFreq(modA);
     osc1.setSinvol(sin1vol);
     osc1.setTrivol(tri1vol);
     osc1.setSqvol(sq1vol);
+    
     //Oscillator 2
     osc2.setFreq(modB);
     osc2.setSinvol(sin2vol);
@@ -46,104 +50,138 @@ double synth(
     //Combined oscillator output
     double osc = (osc1.output() + osc2.output()) / 2;
 
-    //Filter envelopes
-    lpfadsr.setAttack(loA);
-    lpfadsr.setDecay(loD);
-    lpfadsr.setSustain(loS);
-    lpfadsr.setRelease(loR);
-    double lobound = lpfadsr.adsr(locutoff);
-    hpfadsr.setAttack(hiA);
-    hpfadsr.setDecay(hiD);
-    hpfadsr.setSustain(hiS);
-    hpfadsr.setRelease(hiR);
-    double hibound = hpfadsr.adsr(hicutoff);
-    //Filters
-    double f1osc = lpf.lores(osc, lobound, lores);//lpf.lopass(osc,locutoff);
-    double f2osc = hpf.hipass(osc,hicutoff); //hpf.hires(osc, hibound, hires);//might need to use f1osc instead of osc here
+    if (trigger == 1) { //trigger the envelopes
+        lpfadsr.trigger=1;
+        hpfadsr.trigger=1;
+        voladsr.trigger=1;
+    }
 
+    else { //release the envelopes to make it fade out only if it's been triggered
+        lpfadsr.trigger=0;
+        hpfadsr.trigger=0;
+        voladsr.trigger=0;
+    }
+
+    //Filter envelopes
+    double f1osc;
+    if(loEnable) {
+        lpfadsr.setAttack(loA);
+        lpfadsr.setDecay(loD);
+        lpfadsr.setSustain(loS);
+        lpfadsr.setRelease(loR);
+        double lobound = loCutoff*lpfadsr.adsr(1.,lpfadsr.trigger); //lobound is the envelope shape scaled by the max cutoff frequency
+        f1osc = lpf.lores(osc, lobound, loRes);
+    }
+    else f1osc = osc;
+    
+    double f2osc;
+    if(hiEnable) {
+        hpfadsr.setAttack(hiA);
+        hpfadsr.setDecay(hiD);
+        hpfadsr.setSustain(hiS);
+        hpfadsr.setRelease(hiR);
+        double hibound = 22500-(22500-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... needs some work
+        f2osc = hpf.hires(osc, hibound, hiRes);
+    }
+    else f2osc = osc;
+    //try mutually recursive filters?
+    double fosc = (f1osc+f2osc)/2;
+    
     //Volume envelope
     voladsr.setAttack(volA);
     voladsr.setDecay(volD);
     voladsr.setSustain(volS);
     voladsr.setRelease(volR);
-    //OUTPUT
-    double out = f1osc; //voladsr.adsr(f2osc);
-    return out*100;
+    double volume = voladsr.adsr(1.,voladsr.trigger);
+
+    //Output
+    double output = fosc;
+    return output;
 }
 
-int counter = 0;
-int counter2 = 0;
-double myOscOutput = 0;
-maxiOsc myCounter, myOsc, myCutoff;
-maxiFilter myFilter, anotherFilter;
-int frequencies[10] = {100,200,300,400,500,600,700,800,900,1000};
-
+maxiOsc counter;
 void play(double *output) {
-    
-    counter = myCounter.phasor(0.3, 1, 4);
-    counter2 = myOsc.phasor(counter, 12,16);
+
+/*
+ TESTING SETUP
+ */
+    int freq = 440;
+    int trigger = counter.phasor(1, 1, 9); //test counter in place of MIDI input
+/*
+ OSCILLATORS
+ */
     //volumes of waveforms on 2 oscillators
-    double sin1vol = 10;
+    double sin1vol = 1;
     double tri1vol = 0;
-    double sq1vol = 3;
+    double sq1vol = 0;
     double sin2vol = 0;
     double tri2vol = 0;
     double sq2vol = 0;
-    //modulation frequencies and amounts
-    double mod1f = 0.5;
-    double mod2f = 30;
-    double mod3f = counter;
-    double mod1v = 20;
-    double mod2v = 10;
-    double mod3v = 140;
+/*
+ FM
+ */
+    //modulation frequencies and amounts in Hz
+    double mod1afreq = 10;
+    double mod2afreq = 30;
+    double mod3afreq = 0.3;
+    double mod1bfreq = 0;
+    double mod2bfreq = 0;
+    double mod3bfreq = 0;
     //enables for fm
-    int mod1ta = 1;
-    int mod2ta = 1;
-    int mod3ta = 1;
-    int mod1tb = 0;
-    int mod2tb = 0;
-    int mod3tb = 0;
+    int mod1aEnable = 0;
+    int mod2aEnable = 0;
+    int mod3aEnable = 0;
+    int mod1bEnable = 0;
+    int mod2bEnable = 0;
+    int mod3bEnable = 0;
+/*
+ FILTERS
+ */
     //filter envelopes
+    //NOTE: all values are in ms, except Sustain is 0-1. Decay needs to be at least 1!
     double loA = 0;
-    double loD = 1; //needs to be at least 1
+    double loD = 1;
     double loS = 1;
-    double loR = 0; //in ms
+    double loR = 1000;
     double hiA = 0;
-    double hiD = 1; //needs to be at least 1
+    double hiD = 1;
     double hiS = 1;
-    double hiR = 0; //in ms
-    //filter cutoffs and resonances
-    double locutoff = 200;
-    double lores = 10; //awtch out 1-?
-    double hicutoff = 0;
-    double hires = 1;
+    double hiR = 1000;
+    //filter cutoffs, resonances, and enables
+    double loCutoff = 2000;
+    double loRes = 10; //awtch out 1-?
+    int loEnable = 0;
+    double hiCutoff = 0;
+    double hiRes = 10;
+    int hiEnable = 0;
+/*
+ VOLUME
+ */
     //volume envelope
+    //NOTE: all values are in ms, except Sustain is 0-1. Decay needs to be at least 1!
     double volA = 0;
-    double volD = 0;
+    double volD = 1;
     double volS = 1;
-    double volR = 0;
-    
-    output[0] = synth(sin1vol, tri1vol, sq1vol,
+    double volR = 1000;
+
+    //left speaker
+    output[0] = synth(trigger, freq,
+                    sin1vol, tri1vol, sq1vol,
                     sin2vol, tri2vol, sq2vol,
-                    mod1f, mod1v, mod2f, mod2v, mod3f, mod3v,
-                    mod1ta, mod2ta, mod3ta, mod1tb, mod2tb, mod3tb,
-                    locutoff, lores, hicutoff, hires,
+                    mod1afreq, mod1bfreq, mod2afreq,
+                    mod2bfreq, mod3afreq, mod3bfreq,
+                    mod1aEnable, mod2aEnable, mod3aEnable,
+                    mod1bEnable, mod2bEnable, mod3bEnable,
+                    loCutoff, loRes, loEnable,
+                    hiCutoff, hiRes, hiEnable,
                     loA, loD, loS, loR,
                     hiA, hiD, hiS, hiR,
                     volA, volD, volS, volR
                     );
+    //right speaker
     output[1] = output[0];
-    
-    
-    /*
-    counter = myCounter.phasor(1, 0, 9);
-    
-    myOscOutput = myOsc.sawn(anotherFilter.lopass(frequencies[counter], 0.001));
-    
-    output[0] = myFilter.lopass(myOscOutput, myCutoff.phasor(0.1, 0.01, 1.5));
 
-    output[1] = output[0];
-    */
+// output[0]=mod1.sinewave(mod2.sinewave(mod3.sinewave(0.3)*30)*200);//awesome bassline
+// output[1]=output[0];
+
 }
-
-

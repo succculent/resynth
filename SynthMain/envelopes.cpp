@@ -37,11 +37,11 @@
 //
 //    else myEnvelope.trigger=0;//release the envelope to make it fade out only if it's been triggered
 //
-//    if (CurrentCount<5)
+//    if (CurrentCount<0)
 //
-//        myOscOutput=mySwitchableOsc.sawn(CurrentCount*100);
+//        myOscOutput=mySwitchableOsc.sawn(CurrentCount*50);
 //
-//    else if (CurrentCount>=5)//and the 'else' bit.
+//    else if (CurrentCount>=0)//and the 'else' bit.
 //
 //        myOscOutput=mySwitchableOsc.sinewave(CurrentCount*50);//one osc object can produce whichever waveform you want.
 //
