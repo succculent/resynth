@@ -3,9 +3,9 @@ This file uses **dlib** library to optimize.
 
 ## How to build using CMake
 1. Download **cmake** from https://cmake.org/download/ 
-2. If you have cmake version older than 3.14 or you already have the entire dlib library downloaded locally:
-    1. Move **/dlib** to same directory as the file you want to compile 
-3. If you have a cmake version newer than 3.14 and/or don’t want to download the entire dlib library:
+2. If you have cmake version older than 3.14 or you already have the entire **/dlib** library downloaded locally:
+    1. Move **/dlib** to same directory as **test.cpp**
+3. If you have a cmake version newer than 3.14 and/or don’t want to download the entire **/dlib** library:
     1. Uncomment **lines 12-17** in **CMakeLists.txt**
     2. Comment **line 9** in **CMakeLists.txt**
 4. In the **CMakeLists.txt** file
