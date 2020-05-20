@@ -97,7 +97,8 @@ double synth(
         hpfadsr.setDecay(hiD);
         hpfadsr.setSustain(hiS);
         hpfadsr.setRelease(hiR);
-        double hibound = maxiSettings::sampleRate*0.5-(maxiSettings::sampleRate*0.5-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... might need some work
+        int max_value = freq*5; //maxiSettings::sampleRate*0.5 <--- should ideally be this but this breaks it
+        double hibound = max_value-(max_value-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... might need some work
         
         f2osc = hpf.hires(osc, hibound, hiRes);
     }
@@ -167,7 +168,7 @@ void play(double *output) {
     //filter cutoffs, resonances, and enables
     double loCutoff = 300;
     double loRes = 10; //awtch out 1-?
-    int loEnable = 0;
+    int loEnable = 1;
     double hiCutoff = 500;
     double hiRes = 10;
     int hiEnable = 1;
