@@ -365,20 +365,30 @@ double maxiOsc::triangle(double frequency) {
 } 
 
 double synthOsc::output() {
-    return (sine.sinewave(freq) * sinvol + tri.triangle(freq) * trivol + sq.square(freq) * sqvol) / (sinvol + trivol + sqvol + 0.00000001);
+    return (sine.sinewave(freq) * sinvol + tri.triangle(freq) * trivol + sq.square(freq) * sqvol);
 }
 
 void synthOsc::setSinvol(double vol) {
     sinvol = vol;
 }
+
 void synthOsc::setTrivol(double vol) {
     trivol = vol;
 }
+
 void synthOsc::setSqvol(double vol) {
     sqvol = vol;
 }
+
 void synthOsc::setFreq(double frequency) {
     freq = frequency;
+}
+
+void synthOsc::phaseReset(double phaseIn) {
+    //This allows you to set the phase of the oscillator to anything you like.
+    sine.phaseReset(phaseIn);
+    tri.phaseReset(phaseIn);
+    sq.phaseReset(phaseIn);
 }
 
 // don't use this nonsense. Use ramps instead.
@@ -609,6 +619,7 @@ double maxiEnvelope::adsr(double attack, double decay, double sustain, double re
 
 //Delay with feedback
 maxiDelayline::maxiDelayline() {
+    
 	memset( memory, 0, 88200*sizeof (double) );	
 }
 
@@ -632,6 +643,14 @@ double maxiDelayline::dl(double input, int size, double feedback, int position) 
 	phase+=1;
 	return(output);
 	
+}
+
+void maxiDelayline::phaseReset(double phaseIn) {
+    phase = phaseIn;
+    for(double i : memory)
+    {
+        i = 0;
+    }
 }
 
 maxiFractionalDelay::maxiFractionalDelay ( void ) {

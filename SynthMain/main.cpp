@@ -1,6 +1,6 @@
 #include "maximilian.h"
 
-maxiOsc mod1, mod2, mod3, counter;
+maxiOsc mod1, mod2, mod3, counter, test;
 synthOsc oscA, oscB;
 maxiEnv voladsr, lpfadsr, hpfadsr;
 maxiFilter volfilter, lpf, hpf;
@@ -26,9 +26,34 @@ double synth(
     double loA, double loD, double loS, double loR,
     double hiA, double hiD, double hiS, double hiR,
     int delay_size, double delay_feedback, double delay_wet,
+    double dist_shape, double dist_wet,
     double volA, double volD, double volS, double volR
     ) {
-    
+    /*
+     TRIGGERS
+     */
+        if (trigger == 1) {
+            mod1.phaseReset(0);
+            mod2.phaseReset(0);
+            mod3.phaseReset(0);
+            oscA.phaseReset(0);
+            oscB.phaseReset(0);
+            
+            delay.phaseReset(0);
+            
+            lpfadsr.trigger=1;
+            hpfadsr.trigger=1;
+            voladsr.trigger=1;
+        }
+
+        else {
+            lpfadsr.trigger=0;
+            hpfadsr.trigger=0;
+            voladsr.trigger=0;
+        }
+    /*
+     DETUNE
+     */
         double detuned_freq = exp(log(freq)+detune*log(2)/1200);
     /*
      FM
@@ -74,23 +99,13 @@ double synth(
         oscB.setTrivol(triBvol);
         oscB.setSqvol(sqBvol);
         //Combined oscillator output
-        double osc = (oscA.output() + oscB.output()) / 2;
+        double osc;
+        double combined_vol = sinAvol + triAvol + sqAvol + sinBvol + triBvol + sqBvol;
+        if(combined_vol == 0) osc = 0;
+        else osc = (oscA.output() + oscB.output()) / combined_vol;
     /*
      FILTERS
      */
-        if (trigger == 1) { //trigger the envelopes
-            lpfadsr.trigger=1;
-            hpfadsr.trigger=1;
-            voladsr.trigger=1;
-        }
-
-        else { //release the envelopes to make it fade out only if it's been triggered
-            lpfadsr.trigger=0;
-            hpfadsr.trigger=0;
-            voladsr.trigger=0;
-        }
-
-        //Filter envelopes
         double f1osc;
         if(loEnable) {
             lpfadsr.setAttack(loA);
@@ -108,7 +123,7 @@ double synth(
             hpfadsr.setDecay(hiD);
             hpfadsr.setSustain(hiS);
             hpfadsr.setRelease(hiR);
-            int max_value = freq*5; //maxiSettings::sampleRate*0.5 <--- should ideally be this but this breaks it
+            int max_value = freq*5; //maxiSettings::sampleRate*0.5 <--- should ideally be this but this breaks it?
             double hibound = max_value-(max_value-hiCutoff)*hpfadsr.adsr(1.,hpfadsr.trigger); //hibound is the envelope shape scaled by the min cutoff frequency... might need some work
             
             f2osc = hpf.hires(osc, hibound, hiRes);
@@ -119,7 +134,11 @@ double synth(
     /*
      FX
      */
-    delay.dl(fosc, delay_size, delay_feedback)
+        double fxosc = fosc;
+        //Delay
+        fxosc = fxosc*(1-delay_wet)+delay.dl(fosc, delay_size, delay_feedback)*delay_wet;
+        //Distortion
+        fxosc = fxosc*(1-dist_wet)+dist.atanDist(fosc, dist_shape)*dist_wet;
     /*
      VOLUME
      */
@@ -130,7 +149,7 @@ double synth(
         voladsr.setRelease(volR);
         double volume = voladsr.adsr(1.,voladsr.trigger);
         //Output
-        double output = fosc*volume;
+        double output = fxosc;
         return output;
 }
 
@@ -140,7 +159,7 @@ void play(double *output) {
      TESTING SETUP
      */
         int freq = 440;
-        int trigger = counter.phasor(1, 1, 9); //test counter in place of MIDI input
+        int trigger = counter.phasor(0.2, 1, 9); //test counter in place of MIDI input
     /*
      OSCILLATORS
      */
@@ -148,26 +167,26 @@ void play(double *output) {
         double sinAvol = 1;
         double triAvol = 0;
         double sqAvol = 0;
-        double sinBvol = 1;
+        double sinBvol = 0;
         double triBvol = 0;
         double sqBvol = 0;
         //detune oscillator B, input in cents
-        int detune = 100;
+        int detune = 0;
     /*
      FM
      */
         //modulation frequencies and amounts in Hz
-        double mod1Afreq = 1;
+        double mod1Afreq = 2;
         double mod2Afreq = 30;
         double mod3Afreq = 0.3;
         double mod1Bfreq = 1;
         double mod2Bfreq = 0;
         double mod3Bfreq = 0;
         //enables for fm
-        int mod1AEnable = 1;
+        int mod1AEnable = 0;
         int mod2AEnable = 0;
         int mod3AEnable = 0;
-        int mod1BEnable = 1;
+        int mod1BEnable = 0;
         int mod2BEnable = 0;
         int mod3BEnable = 0;
     /*
@@ -193,15 +212,25 @@ void play(double *output) {
     /*
      FX
      */
-        //Delay
-    int delay_size;
-    double delay_feedback;
-    double delay_wet;
-        //Distortion
-    double dist_shape;
-    double dist_wet;
+        //Delay: size in samples, feedback 0-1, wet 0-1
+    int delay_size = 14000;
+    double delay_feedback = 0.80;
+    double delay_wet = 0;
+        //Distortion: shape 1-inf, wet 0-1
+    double dist_shape = 1000;
+    double dist_wet = 1;
         //Flanger
+    unsigned int flang_delay;
+    double flang_feedback;
+    double flang_speed;
+    double flang_depth;
+    double flang_wet;
         //Chorus
+    unsigned int chorus_delay;
+    double chorus_feedback;
+    double chorus_speed;
+    double chorus_depth;
+    double chorus_wet;
     /*
      VOLUME
      */
@@ -210,7 +239,7 @@ void play(double *output) {
         double volA = 0;
         double volD = 1;
         double volS = 1;
-        double volR = 1000;
+        double volR = 10000;
 
         //left speaker
         output[0] = synth(trigger, freq, detune,
@@ -225,9 +254,9 @@ void play(double *output) {
                         loA, loD, loS, loR,
                         hiA, hiD, hiS, hiR,
                         delay_size, delay_feedback, delay_wet,
+                        dist_shape, dist_wet,
                         volA, volD, volS, volR
                         );
         //right speaker
         output[1] = output[0];
-
 }

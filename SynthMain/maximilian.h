@@ -123,6 +123,7 @@ public:
     void setTrivol(double vol);
     void setSqvol(double vol);
     void setFreq(double freq);
+    void phaseReset(double phaseIn);
     
 };
 
@@ -169,7 +170,7 @@ public:
 	maxiDelayline();
 	double dl(double input, int size, double feedback);
 	double dl(double input, int size, double feedback, int position);
-	
+    void phaseReset(double phaseIn);
 	
 };
 
