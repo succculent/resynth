@@ -17,16 +17,16 @@ double synth(
     int trigger, int freq, int detune,
     double sinAvol, double triAvol, double sqAvol,
     double sinBvol, double triBvol, double sqBvol,
-    double mod1Afreq, double mod1Bfreq, double mod2Afreq,
-    double mod2Bfreq, double mod3Afreq, double mod3Bfreq,
-    int mod1AEnable, int mod2AEnable, int mod3AEnable,
-    int mod1BEnable, int mod2BEnable, int mod3BEnable,
+    double mod1freq, double mod2freq, double mod3freq,
+    int mod1amt, int mod2amt, int mod3amt,
     double loCutoff, double loRes, int loEnable,
     double hiCutoff, double hiRes, int hiEnable,
     double loA, double loD, double loS, double loR,
     double hiA, double hiD, double hiS, double hiR,
     int delay_size, double delay_feedback, double delay_wet,
     double dist_shape, double dist_wet,
+    unsigned int flang_delay, double flang_feedback, double flang_speed, double flang_depth, double flang_wet,
+    unsigned int chorus_delay, double chorus_feedback, double chorus_speed, double chorus_depth, double chorus_wet,
     double volA, double volD, double volS, double volR
     ) {
     /*
@@ -39,7 +39,7 @@ double synth(
             oscA.phaseReset(0);
             oscB.phaseReset(0);
             
-            delay.phaseReset(0);
+            //delay.phaseReset(0);
             
             lpfadsr.trigger=1;
             hpfadsr.trigger=1;
@@ -58,32 +58,18 @@ double synth(
     /*
      FM
      */
-        double mod3val;
-        double mod2val;
-        double mod1val;
         //modulation frequencies for Oscillator A
-        if(mod3AEnable) mod3val = mod3.sinewave(mod3Afreq);
-        else mod3val = 1;
-        
-        if(mod2AEnable) mod2val = mod2.sinewave(mod3val*mod2Afreq);
-        else mod2val = 1;
-        
-        if(mod1AEnable) mod1val = mod1.sinewave(mod2val*mod1Afreq);
-        else mod1val = 1;
-        
-        double modA = freq + freq*mod1val;
+        //mod2 modulates mod1, and mod1 modulates Osc A
+        double mod2val = mod2amt * mod2.sinewave(mod2freq);
+        double mod1val = 0;
+        if(mod2val == 0) mod1val = mod1amt * mod1.sinewave(mod1freq);
+        else mod1val = mod1amt * mod1.sinewave(mod1freq + mod2val);
+        double modA = freq+mod1val;
         
         //modulation frequencies for Oscillator B
-        if(mod3BEnable) mod3val = mod3.sinewave(mod3Bfreq);
-        else mod3val = 1;
-        
-        if(mod2BEnable) mod2val = mod2.sinewave(mod3val*mod2Bfreq);
-        else mod2val = 1;
-        
-        if(mod1BEnable) mod1val = mod1.sinewave(mod2val*mod1Bfreq);
-        else mod1val = 1;
-        
-        double modB = detuned_freq + detuned_freq*mod1val;
+        //mod3 modulates Osc B
+        double mod3val = mod3amt * mod3.sinewave(mod3freq);
+        double modB = detuned_freq + mod3val;
     /*
      OSCILLATORS
      */
@@ -129,16 +115,19 @@ double synth(
             f2osc = hpf.hires(osc, hibound, hiRes);
         }
         else f2osc = osc;
-        //try mutually recursive filters instead of average?
+    
         double fosc = (f1osc+f2osc)/2;
     /*
      FX
      */
         double fxosc = fosc;
         //Delay
-        fxosc = fxosc*(1-delay_wet)+delay.dl(fosc, delay_size, delay_feedback)*delay_wet;
+        fxosc = fxosc*(1-delay_wet)+delay.dl(fxosc, delay_size, delay_feedback)*delay_wet;
         //Distortion
-        fxosc = fxosc*(1-dist_wet)+dist.atanDist(fosc, dist_shape)*dist_wet;
+        //fxosc = fxosc*(1-dist_wet)+dist.atanDist(fxosc, dist_shape)*dist_wet;
+        //Flanger
+        //fxosc = fxosc+flang.flange(fxosc, flang_delay, flang_feedback, flang_speed, flang_depth);
+        //Chorus
     /*
      VOLUME
      */
@@ -149,6 +138,7 @@ double synth(
         voladsr.setRelease(volR);
         double volume = voladsr.adsr(1.,voladsr.trigger);
         //Output
+        //double output = fxosc*volume;
         double output = fxosc;
         return output;
 }
@@ -158,7 +148,7 @@ void play(double *output) {
     /*
      TESTING SETUP
      */
-        int freq = 440;
+        int freq = 230;
         int trigger = counter.phasor(0.2, 1, 9); //test counter in place of MIDI input
     /*
      OSCILLATORS
@@ -168,27 +158,20 @@ void play(double *output) {
         double triAvol = 0;
         double sqAvol = 0;
         double sinBvol = 0;
-        double triBvol = 0;
+        double triBvol = 1;
         double sqBvol = 0;
         //detune oscillator B, input in cents
-        int detune = 0;
+        int detune = 500;
     /*
      FM
      */
         //modulation frequencies and amounts in Hz
-        double mod1Afreq = 2;
-        double mod2Afreq = 30;
-        double mod3Afreq = 0.3;
-        double mod1Bfreq = 1;
-        double mod2Bfreq = 0;
-        double mod3Bfreq = 0;
-        //enables for fm
-        int mod1AEnable = 0;
-        int mod2AEnable = 0;
-        int mod3AEnable = 0;
-        int mod1BEnable = 0;
-        int mod2BEnable = 0;
-        int mod3BEnable = 0;
+        double mod1freq = 20;
+        double mod2freq = 2.5;
+        double mod3freq = 10;
+        int mod1amt = 150;
+        int mod2amt = 0;
+        int mod3amt = 0;
     /*
      FILTERS
      */
@@ -213,24 +196,24 @@ void play(double *output) {
      FX
      */
         //Delay: size in samples, feedback 0-1, wet 0-1
-    int delay_size = 14000;
-    double delay_feedback = 0.80;
-    double delay_wet = 0;
+        int delay_size = 44000;
+        double delay_feedback = 0.9;
+        double delay_wet = 0;
         //Distortion: shape 1-inf, wet 0-1
-    double dist_shape = 1000;
-    double dist_wet = 1;
+        double dist_shape = 1000;
+        double dist_wet = 0;
         //Flanger
-    unsigned int flang_delay;
-    double flang_feedback;
-    double flang_speed;
-    double flang_depth;
-    double flang_wet;
+        unsigned int flang_delay = 800;
+        double flang_feedback = 0.7;
+        double flang_speed  = 4;
+        double flang_depth = 0.9;
+        double flang_wet = 0;
         //Chorus
-    unsigned int chorus_delay;
-    double chorus_feedback;
-    double chorus_speed;
-    double chorus_depth;
-    double chorus_wet;
+        unsigned int chorus_delay = 800;
+        double chorus_feedback = 0.7;
+        double chorus_speed = 1;
+        double chorus_depth = 0.7;
+        double chorus_wet = 0;
     /*
      VOLUME
      */
@@ -245,16 +228,16 @@ void play(double *output) {
         output[0] = synth(trigger, freq, detune,
                         sinAvol, triAvol, sqAvol,
                         sinBvol, triBvol, sqBvol,
-                        mod1Afreq, mod1Bfreq, mod2Afreq,
-                        mod2Bfreq, mod3Afreq, mod3Bfreq,
-                        mod1AEnable, mod2AEnable, mod3AEnable,
-                        mod1BEnable, mod2BEnable, mod3BEnable,
+                        mod1freq, mod2freq, mod3freq,
+                        mod1amt, mod2amt, mod3amt,
                         loCutoff, loRes, loEnable,
                         hiCutoff, hiRes, hiEnable,
                         loA, loD, loS, loR,
                         hiA, hiD, hiS, hiR,
                         delay_size, delay_feedback, delay_wet,
                         dist_shape, dist_wet,
+                        flang_delay, flang_feedback, flang_speed, flang_depth, flang_wet,
+                        chorus_delay, chorus_feedback, chorus_speed, chorus_depth, chorus_wet,
                         volA, volD, volS, volR
                         );
         //right speaker

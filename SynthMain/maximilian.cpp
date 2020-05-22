@@ -619,7 +619,7 @@ double maxiEnvelope::adsr(double attack, double decay, double sustain, double re
 
 //Delay with feedback
 maxiDelayline::maxiDelayline() {
-    
+    phase = 0;
 	memset( memory, 0, 88200*sizeof (double) );	
 }
 
@@ -629,10 +629,10 @@ double maxiDelayline::dl(double input, int size, double feedback)  {
 		phase = 0;
 	}
 	output=memory[phase];
-	memory[phase]=(memory[phase]*feedback)+(input*feedback)*0.5;
-	phase+=1;
+	//memory[phase]=(memory[phase]*feedback)+(input*feedback)*0.5;
+    memory[phase] = (memory[phase]*feedback + input);
+    phase++;
 	return(output);
-	
 }
 
 double maxiDelayline::dl(double input, int size, double feedback, int position)  {
