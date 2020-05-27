@@ -52,7 +52,8 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    /*WHITE NOISE - works for this, but using one pointer for left & right channels is wrong... see sine example
+    /*
+     WHITE NOISE - works for this, but using one pointer for left & right channels is wrong... see sine example
 
     for(int channel = 0; channel < bufferToFill.buffer->getNumChannels(); channel++)
     {
@@ -62,6 +63,9 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             buffer[sample] = (random.nextFloat() * 2.0f - 1.0f)*0.25f;
         }
     }
+     */
+    /*
+     SINE WAVE
      */
         float* const leftSpeaker = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
         float* const rightSpeaker = bufferToFill.buffer->getWritePointer(1, bufferToFill.startSample);
