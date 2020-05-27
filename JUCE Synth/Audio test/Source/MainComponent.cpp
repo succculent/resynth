@@ -66,7 +66,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
      */
     /*
      SINE WAVE
-     */
+     
         float* const leftSpeaker = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
         float* const rightSpeaker = bufferToFill.buffer->getWritePointer(1, bufferToFill.startSample);
     
@@ -76,6 +76,18 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             rightSpeaker[sample] = wavetable[(int)phase] * amplitude;
             phase = fmod((phase + increment), wavetableSize); //wraps around
         }
+     */
+    
+    
+    float* leftSpeaker = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
+    float* rightSpeaker = bufferToFill.buffer->getWritePointer(1, bufferToFill.startSample);
+    
+    for(int sample = 0; sample < bufferToFill.numSamples; sample++)
+    {
+        float sine = testOsc.sinewave(440);
+        leftSpeaker[sample] = sine;
+        rightSpeaker[sample] = sine;
+    }
 }
 
 void MainComponent::releaseResources()

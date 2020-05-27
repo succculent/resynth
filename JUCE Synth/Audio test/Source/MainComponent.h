@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "maximilian.h"
 
 //==============================================================================
 /*
@@ -41,6 +42,8 @@ private:
     double phase; //position in wavetable
     double increment; //defines how much to move over in wavetable
     double amplitude;
+    
+    maxiOsc testOsc;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
