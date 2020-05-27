@@ -21,9 +21,14 @@ AudioPluginSynthAudioProcessor::AudioPluginSynthAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+attackTime(0.1f),
+tree(*this, nullptr)
 #endif
 {
+    NormalisableRange<float> attackParam (0.1f, 5000.0f);
+    tree.createAndAddParameter("attack", "Attack", "Attack", attackParam, 0.1f, nullptr, nullptr);
+    
     mySynth.clearVoices();
     mySynth.clearSounds();
     
@@ -153,7 +158,7 @@ void AudioPluginSynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
+    
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...

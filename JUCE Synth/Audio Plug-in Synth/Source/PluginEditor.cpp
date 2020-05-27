@@ -18,6 +18,13 @@ AudioPluginSynthAudioProcessorEditor::AudioPluginSynthAudioProcessorEditor (Audi
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
+    attackSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    attackSlider.setRange(0.1, 5000);
+    //attackSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 20.0, 10.0);
+    attackSlider.setValue(0.1);
+    attackSlider.addListener(this);
+    addAndMakeVisible(&attackSlider);
+    
 }
 
 AudioPluginSynthAudioProcessorEditor::~AudioPluginSynthAudioProcessorEditor()
@@ -37,6 +44,11 @@ void AudioPluginSynthAudioProcessorEditor::paint (Graphics& g)
 
 void AudioPluginSynthAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    attackSlider.setBounds(10, 10, 40, 100);
+}
+
+void AudioPluginSynthAudioProcessorEditor::sliderValueChanged(Slider* slider)
+{
+    if(slider == &attackSlider)
+        processor.attackTime = attackSlider.getValue();
 }

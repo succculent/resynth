@@ -32,8 +32,7 @@ public:
     {
         env1.trigger = 0;
         allowTailOff = true;
-        //if(velocity == 0)
-            clearCurrentNote();
+        clearCurrentNote();
     }
     //========================================
     void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
