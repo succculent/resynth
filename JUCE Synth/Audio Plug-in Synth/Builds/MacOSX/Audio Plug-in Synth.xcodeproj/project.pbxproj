@@ -77,6 +77,46 @@
 			isa = PBXBuildFile;
 			fileRef = A3981C1711ADC756521FC2C8;
 		};
+		D3B1E512438D542F9BC5BBC2 = {
+			isa = PBXBuildFile;
+			fileRef = 1D0DCDE60E0A5BFC9F826CF3;
+		};
+		E2E72D53B99A54DA2E9A256A = {
+			isa = PBXBuildFile;
+			fileRef = 8ACECF8D148700146D95DDF8;
+		};
+		F8576AAD46335ED0AFBD6FFD = {
+			isa = PBXBuildFile;
+			fileRef = 18C022275C8E7B15BC779468;
+		};
+		640AFD6EE0E8DCD06E4120E2 = {
+			isa = PBXBuildFile;
+			fileRef = 3ECC07D114D742BEECB64CB1;
+		};
+		5F8215101B8C0EFB568E3F60 = {
+			isa = PBXBuildFile;
+			fileRef = 519680A54DAD537ED5E98103;
+		};
+		CEB9B2B7CD292AF007FCF672 = {
+			isa = PBXBuildFile;
+			fileRef = EF308D3774CE815B49C9FAD9;
+		};
+		7CAB0524A5258072AE389030 = {
+			isa = PBXBuildFile;
+			fileRef = E41CA1E1891452B32102B38B;
+		};
+		0B60AA6299E4DD7579E96B6F = {
+			isa = PBXBuildFile;
+			fileRef = 3E5986939A18E6DDFC00FFDB;
+		};
+		1FF2ABC3F93553FBC4156ED9 = {
+			isa = PBXBuildFile;
+			fileRef = ADA6590C907D1AA06FAC5AB6;
+		};
+		40F422ADA6D3F10922E31A27 = {
+			isa = PBXBuildFile;
+			fileRef = 2A6AD71B8B2BBF901B390573;
+		};
 		7A0513DDDB54DD0FBFDE2C43 = {
 			isa = PBXBuildFile;
 			fileRef = 85A8E5B8C77FC6FB3204F1F5;
@@ -179,6 +219,13 @@
 			path = "~/JUCE/modules/juce_audio_basics";
 			sourceTree = "<absolute>";
 		};
+		09F77266E8705395EFB3DC80 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = maxiMFCC.h;
+			path = "../../../Maximilian libs/libs/maxiMFCC.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		0DD66618418DAABA0599DE98 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -200,12 +247,26 @@
 			path = "../../JuceLibraryCode/include_juce_audio_formats.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		14C86DEDACE53B47B6CCC2BA = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = "stb_vorbis.h";
+			path = "../../../Maximilian libs/stb_vorbis.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		17846B2E568F8FF4D5F3348D = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Accelerate.framework;
 			path = System/Library/Frameworks/Accelerate.framework;
 			sourceTree = SDKROOT;
+		};
+		18C022275C8E7B15BC779468 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = maxiAtoms.cpp;
+			path = "../../../Maximilian libs/libs/maxiAtoms.cpp";
+			sourceTree = "SOURCE_ROOT";
 		};
 		18C420851917D4339CA27965 = {
 			isa = PBXFileReference;
@@ -221,11 +282,39 @@
 			path = System/Library/Frameworks/CoreAudioKit.framework;
 			sourceTree = SDKROOT;
 		};
+		1CA04A78A2AEE99D31119EC3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = sineTable.h;
+			path = "../../../Maximilian libs/libs/sineTable.h";
+			sourceTree = "SOURCE_ROOT";
+		};
+		1D0DCDE60E0A5BFC9F826CF3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = fft.cpp;
+			path = "../../../Maximilian libs/libs/fft.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		22317E220EFC61C9C6BB37EA = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.cpp;
 			name = PluginEditor.cpp;
 			path = ../../Source/PluginEditor.cpp;
+			sourceTree = "SOURCE_ROOT";
+		};
+		282BB08B9A26580230F36E33 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = fft.h;
+			path = "../../../Maximilian libs/libs/fft.h";
+			sourceTree = "SOURCE_ROOT";
+		};
+		2A6AD71B8B2BBF901B390573 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = "stb_vorbis.c";
+			path = "../../../Maximilian libs/stb_vorbis.c";
 			sourceTree = "SOURCE_ROOT";
 		};
 		2C1548877E375344AD525F65 = {
@@ -270,6 +359,20 @@
 			path = "~/JUCE/modules/juce_graphics";
 			sourceTree = "<absolute>";
 		};
+		3E5986939A18E6DDFC00FFDB = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = main.cpp;
+			path = "../../../Maximilian libs/main.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		3ECC07D114D742BEECB64CB1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = maxiBark.cpp;
+			path = "../../../Maximilian libs/libs/maxiBark.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		3FC638649F5AFFF3809ABBEC = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -289,6 +392,13 @@
 			lastKnownFileType = sourcecode.cpp.objcpp;
 			name = "include_juce_core.mm";
 			path = "../../JuceLibraryCode/include_juce_core.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
+		519680A54DAD537ED5E98103 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = maxiFFT.cpp;
+			path = "../../../Maximilian libs/libs/maxiFFT.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		568816CF0D66C5011E675B66 = {
@@ -361,6 +471,13 @@
 			path = "~/JUCE/modules/juce_events";
 			sourceTree = "<absolute>";
 		};
+		73FB0C751553D26314BED15C = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = maxiFFT.h;
+			path = "../../../Maximilian libs/libs/maxiFFT.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		744A0053F26B257D88E171B7 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.cpp;
@@ -389,6 +506,13 @@
 			path = "../../JuceLibraryCode/include_juce_audio_plugin_client_VST3.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
+		8ACECF8D148700146D95DDF8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = filters.cpp;
+			path = "../../../Maximilian libs/libs/filters.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		8F20152C68B581559CD03872 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -410,12 +534,26 @@
 			path = "../../JuceLibraryCode/include_juce_gui_basics.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		94DF9B4F4CD690DCC4D97EF6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			name = "include_juce_audio_devices.mm";
+			path = "../../JuceLibraryCode/include_juce_audio_devices.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
 		968CDB77EE64DA43C969CE3A = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = OpenGL.framework;
 			path = System/Library/Frameworks/OpenGL.framework;
 			sourceTree = SDKROOT;
+		};
+		97402DC10EA268C0A5DEBBA9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_opengl";
+			path = "~/JUCE/modules/juce_opengl";
+			sourceTree = "<absolute>";
 		};
 		9B8169E23A9B6A4C4A1B1423 = {
 			isa = PBXFileReference;
@@ -424,11 +562,11 @@
 			path = ../../JuceLibraryCode/JuceHeader.h;
 			sourceTree = "SOURCE_ROOT";
 		};
-		9DBB2F69225DCA82A743AFF5 = {
+		9BF722613940BFA1AE517622 = {
 			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = PluginEditor.h;
-			path = ../../Source/PluginEditor.h;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = "include_juce_audio_plugin_client_Standalone.cpp";
+			path = "../../JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		A132F58EFF67CA09191B0092 = {
@@ -444,13 +582,6 @@
 			name = RecentFilesMenuTemplate.nib;
 			path = RecentFilesMenuTemplate.nib;
 			sourceTree = "SOURCE_ROOT";
-		};
-		A3ADD75C09DCF972C02D886C = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_data_structures";
-			path = "~/JUCE/modules/juce_data_structures";
-			sourceTree = "<absolute>";
 		};
 		A8CBE6D14239228437AA6E01 = {
 			isa = PBXFileReference;
@@ -480,26 +611,33 @@
 			path = "libAudio Plug-in Synth.a";
 			sourceTree = "BUILT_PRODUCTS_DIR";
 		};
-		94DF9B4F4CD690DCC4D97EF6 = {
+		93A7A4AB92BBC1A197E18BE2 = {
 			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.objcpp;
-			name = "include_juce_audio_devices.mm";
-			path = "../../JuceLibraryCode/include_juce_audio_devices.mm";
+			lastKnownFileType = sourcecode.c.h;
+			name = maxim.h;
+			path = "../../../Maximilian libs/libs/maxim.h";
 			sourceTree = "SOURCE_ROOT";
 		};
-		97402DC10EA268C0A5DEBBA9 = {
+		9918AEF0ADEB05803E892311 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = maximilian.h;
+			path = "../../../Maximilian libs/maximilian.h";
+			sourceTree = "SOURCE_ROOT";
+		};
+		9DBB2F69225DCA82A743AFF5 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = PluginEditor.h;
+			path = ../../Source/PluginEditor.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		A3ADD75C09DCF972C02D886C = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
-			name = "juce_opengl";
-			path = "~/JUCE/modules/juce_opengl";
+			name = "juce_data_structures";
+			path = "~/JUCE/modules/juce_data_structures";
 			sourceTree = "<absolute>";
-		};
-		9BF722613940BFA1AE517622 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = "include_juce_audio_plugin_client_Standalone.cpp";
-			path = "../../JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp";
-			sourceTree = "SOURCE_ROOT";
 		};
 		A3DDE796F93FF4A6E3249B17 = {
 			isa = PBXFileReference;
@@ -513,6 +651,13 @@
 			lastKnownFileType = file.r;
 			name = "include_juce_audio_plugin_client_AU.r";
 			path = "../../JuceLibraryCode/include_juce_audio_plugin_client_AU.r";
+			sourceTree = "SOURCE_ROOT";
+		};
+		ADA6590C907D1AA06FAC5AB6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = maximilian.cpp;
+			path = "../../../Maximilian libs/maximilian.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		B740822F13D3088451DD7680 = {
@@ -534,6 +679,13 @@
 			lastKnownFileType = text.plist.xml;
 			name = "Info-Standalone_Plugin.plist";
 			path = "Info-Standalone_Plugin.plist";
+			sourceTree = "SOURCE_ROOT";
+		};
+		C20F8D7C85824B27D750070A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = maxiGrains.h;
+			path = "../../../Maximilian libs/libs/maxiGrains.h";
 			sourceTree = "SOURCE_ROOT";
 		};
 		C88C6FDCFDC9943C77BDF3C5 = {
@@ -578,6 +730,13 @@
 			path = "../../JuceLibraryCode/include_juce_audio_plugin_client_VST_utils.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		E1E3D5D75397B53634F7D0DC = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = maxiBark.h;
+			path = "../../../Maximilian libs/libs/maxiBark.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		E1F71479A634D2C2736CF66D = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -585,11 +744,32 @@
 			path = "~/JUCE/modules/juce_audio_formats";
 			sourceTree = "<absolute>";
 		};
+		E41CA1E1891452B32102B38B = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = maxiMFCC.cpp;
+			path = "../../../Maximilian libs/libs/maxiMFCC.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		E8DA0F85C98136DC55A3F241 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = maxiAtoms.h;
+			path = "../../../Maximilian libs/libs/maxiAtoms.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		EEC488ABAA1AE4F205B25783 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			name = PluginProcessor.h;
 			path = ../../Source/PluginProcessor.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		EF308D3774CE815B49C9FAD9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = maxiGrains.cpp;
+			path = "../../../Maximilian libs/libs/maxiGrains.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		FD9B7A12528F11A73DF7BC32 = {
@@ -606,9 +786,45 @@
 			path = ../../JuceLibraryCode/AppConfig.h;
 			sourceTree = "SOURCE_ROOT";
 		};
+		207E27BB018E727F4C5F3AF2 = {
+			isa = PBXGroup;
+			children = (
+				1D0DCDE60E0A5BFC9F826CF3,
+				282BB08B9A26580230F36E33,
+				8ACECF8D148700146D95DDF8,
+				18C022275C8E7B15BC779468,
+				E8DA0F85C98136DC55A3F241,
+				3ECC07D114D742BEECB64CB1,
+				E1E3D5D75397B53634F7D0DC,
+				519680A54DAD537ED5E98103,
+				73FB0C751553D26314BED15C,
+				EF308D3774CE815B49C9FAD9,
+				C20F8D7C85824B27D750070A,
+				93A7A4AB92BBC1A197E18BE2,
+				E41CA1E1891452B32102B38B,
+				09F77266E8705395EFB3DC80,
+				1CA04A78A2AEE99D31119EC3,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		E750F013089782D527DB6DD8 = {
+			isa = PBXGroup;
+			children = (
+				207E27BB018E727F4C5F3AF2,
+				3E5986939A18E6DDFC00FFDB,
+				ADA6590C907D1AA06FAC5AB6,
+				9918AEF0ADEB05803E892311,
+				2A6AD71B8B2BBF901B390573,
+				14C86DEDACE53B47B6CCC2BA,
+			);
+			name = "Maximilian libs";
+			sourceTree = "<group>";
+		};
 		EF2D99A200AB7F482831C1E4 = {
 			isa = PBXGroup;
 			children = (
+				E750F013089782D527DB6DD8,
 				D9F23E343EDD9726E0FC090C,
 				18C420851917D4339CA27965,
 				85A8E5B8C77FC6FB3204F1F5,
@@ -783,6 +999,7 @@
 					"$(HOME)/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"../../JuceLibraryCode",
 					"$(HOME)/JUCE/modules",
+					"\"/Users/lcheng/RESYNTH/JUCE Synth/Maximilian libs\"",
 					"$(HOME)/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
 				);
@@ -887,6 +1104,7 @@
 					"$(HOME)/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"../../JuceLibraryCode",
 					"$(HOME)/JUCE/modules",
+					"\"/Users/lcheng/RESYNTH/JUCE Synth/Maximilian libs\"",
 					"$(HOME)/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
 				);
@@ -990,6 +1208,7 @@
 					"$(HOME)/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"../../JuceLibraryCode",
 					"$(HOME)/JUCE/modules",
+					"\"/Users/lcheng/RESYNTH/JUCE Synth/Maximilian libs\"",
 					"$(HOME)/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
 				);
@@ -1083,6 +1302,7 @@
 					"$(HOME)/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"../../JuceLibraryCode",
 					"$(HOME)/JUCE/modules",
+					"\"/Users/lcheng/RESYNTH/JUCE Synth/Maximilian libs\"",
 					"$(HOME)/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
 				);
@@ -1491,6 +1711,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3B1E512438D542F9BC5BBC2,
+				E2E72D53B99A54DA2E9A256A,
+				F8576AAD46335ED0AFBD6FFD,
+				640AFD6EE0E8DCD06E4120E2,
+				5F8215101B8C0EFB568E3F60,
+				CEB9B2B7CD292AF007FCF672,
+				7CAB0524A5258072AE389030,
+				0B60AA6299E4DD7579E96B6F,
+				1FF2ABC3F93553FBC4156ED9,
+				40F422ADA6D3F10922E31A27,
 				7A0513DDDB54DD0FBFDE2C43,
 				A42CAEC393E8BC7C138DB848,
 				1FCD365B60284701658F7C41,
