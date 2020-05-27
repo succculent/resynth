@@ -24,6 +24,14 @@ AudioPluginSynthAudioProcessor::AudioPluginSynthAudioProcessor()
                        )
 #endif
 {
+    mySynth.clearVoices();
+    mySynth.clearSounds();
+    
+    for(int voice = 0; voice < 5; voice++)
+    {
+        mySynth.addVoice(new SynthVoice());
+    }
+    mySynth.addSound(new SynthSound());
 }
 
 AudioPluginSynthAudioProcessor::~AudioPluginSynthAudioProcessor()
@@ -95,8 +103,10 @@ void AudioPluginSynthAudioProcessor::changeProgramName (int index, const String&
 //==============================================================================
 void AudioPluginSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    ignoreUnused(samplesPerBlock);
+    lastSampleRate = sampleRate;
+    mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
+    
 }
 
 void AudioPluginSynthAudioProcessor::releaseResources()
@@ -144,6 +154,7 @@ void AudioPluginSynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing

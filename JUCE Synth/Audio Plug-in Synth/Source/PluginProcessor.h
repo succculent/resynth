@@ -59,7 +59,9 @@ public:
 
 private:
     Synthesiser mySynth;
+    SynthVoice* myVoice;
     
+    double lastSampleRate;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginSynthAudioProcessor)
 };
