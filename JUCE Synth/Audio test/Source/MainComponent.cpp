@@ -77,7 +77,9 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             phase = fmod((phase + increment), wavetableSize); //wraps around
         }
      */
-    
+    /*
+     MAXIMILIAN LINKED
+     */
     
     float* leftSpeaker = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
     float* rightSpeaker = bufferToFill.buffer->getWritePointer(1, bufferToFill.startSample);
