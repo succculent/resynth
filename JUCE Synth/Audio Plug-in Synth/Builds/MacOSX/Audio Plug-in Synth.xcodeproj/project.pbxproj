@@ -174,6 +174,7 @@
 		85A8E5B8C77FC6FB3204F1F5 /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProcessor.cpp; path = ../../Source/PluginProcessor.cpp; sourceTree = SOURCE_ROOT; };
 		8828EF648B1CC3F341DB9C4B /* include_juce_graphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_graphics.mm; path = ../../JuceLibraryCode/include_juce_graphics.mm; sourceTree = SOURCE_ROOT; };
 		88840F39B5BFD43630D344F9 /* include_juce_audio_plugin_client_VST3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_VST3.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_VST3.cpp; sourceTree = SOURCE_ROOT; };
+		8974096D24803AD700A13808 /* SynthParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SynthParameters.h; path = ../../Source/SynthParameters.h; sourceTree = "<group>"; };
 		8ACECF8D148700146D95DDF8 /* filters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filters.cpp; path = "../../../Maximilian libs/libs/filters.cpp"; sourceTree = SOURCE_ROOT; };
 		8E8698727C052038F033956F /* Audio Plug-in Synth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Audio Plug-in Synth.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F20152C68B581559CD03872 /* include_juce_audio_plugin_client_AU_2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AU_2.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AU_2.mm; sourceTree = SOURCE_ROOT; };
@@ -430,6 +431,7 @@
 			children = (
 				E750F013089782D527DB6DD8 /* Maximilian libs */,
 				D9F23E343EDD9726E0FC090C /* SynthSound.h */,
+				8974096D24803AD700A13808 /* SynthParameters.h */,
 				18C420851917D4339CA27965 /* SynthVoice.h */,
 				85A8E5B8C77FC6FB3204F1F5 /* PluginProcessor.cpp */,
 				EEC488ABAA1AE4F205B25783 /* PluginProcessor.h */,

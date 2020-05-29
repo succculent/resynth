@@ -13,7 +13,7 @@
 #include <JuceHeader.h>
 #include "SynthSound.h"
 #include "SynthVoice.h"
-
+//#include "SynthParameters.h"
 //==============================================================================
 /**
 */

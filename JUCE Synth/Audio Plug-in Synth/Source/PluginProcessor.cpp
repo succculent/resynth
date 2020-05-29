@@ -27,7 +27,7 @@ AudioPluginSynthAudioProcessor::AudioPluginSynthAudioProcessor()
     mySynth.clearVoices();
     mySynth.clearSounds();
     
-    for(int voice = 0; voice < 5; voice++)
+    for(int voice = 0; voice < 8; voice++)
     {
         mySynth.addVoice(new SynthVoice());
     }
