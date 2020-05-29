@@ -38,6 +38,11 @@ public:
     //========================================
     void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
     {
+        s1.setFreq(frequency);
+        s1.setSinvol(0);
+        s1.setTrivol(1);
+        s1.setSqvol(0);
+        
         env1.setAttack(2000);
         env1.setDecay(500);
         env1.setSustain(0.8);
@@ -45,7 +50,7 @@ public:
         
         for(int sample = 0; sample < numSamples; sample++)
         {
-            double wave = osc1.square(frequency);
+            double wave = s1.output();
             wave = env1.adsr(wave, env1.trigger) * level;
             wave = filter.lores(wave, 200, 0.1);
             for(int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
@@ -54,6 +59,19 @@ public:
             }
             startSample++;
         }
+        
+        
+//        for(int sample = 0; sample < numSamples; sample++)
+//        {
+//            double wave = osc1.square(frequency);
+//            wave = env1.adsr(wave, env1.trigger) * level;
+//            wave = filter.lores(wave, 200, 0.1);
+//            for(int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
+//            {
+//                outputBuffer.addSample(channel, startSample, wave);
+//            }
+//            startSample++;
+//        }
         
     }
     //========================================
@@ -73,6 +91,7 @@ private:
     double frequency;
     
     maxiOsc osc1;
+    synthOsc s1;
     maxiEnv env1;
     maxiFilter filter;
 };
