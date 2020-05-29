@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "maximilian.h"
+//#include "maximilian.h"
 
 /*
  LINKING MAXIMILIAN
@@ -52,7 +52,7 @@ private:
     double increment; //defines how much to move over in wavetable
     double amplitude;
     //maximilian
-    maxiOsc testOsc;
+    //maxiOsc testOsc;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

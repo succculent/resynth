@@ -148,7 +148,7 @@ void play(double *output) {
     /*
      TESTING SETUP
      */
-        int freq = 230;
+        int freq = 700;
         int trigger = counter.phasor(0.2, 1, 9); //test counter in place of MIDI input
     /*
      OSCILLATORS
@@ -158,7 +158,7 @@ void play(double *output) {
         double triAvol = 0;
         double sqAvol = 0;
         double sinBvol = 0;
-        double triBvol = 1;
+        double triBvol = 0;
         double sqBvol = 0;
         //detune oscillator B, input in cents
         int detune = 500;
@@ -169,7 +169,7 @@ void play(double *output) {
         double mod1freq = 20;
         double mod2freq = 2.5;
         double mod3freq = 10;
-        int mod1amt = 150;
+        int mod1amt = 0;
         int mod2amt = 0;
         int mod3amt = 0;
     /*

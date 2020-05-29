@@ -77,7 +77,6 @@ public:
 	}
 };
 
-
 class maxiOsc {
 	
 	double frequency;
