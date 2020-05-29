@@ -1,4 +1,5 @@
 #include "maximilian.h"
+//#include "libs/maxim.h"
 #include <iostream>
 
 maxiOsc osc1, osc2, osc3, osc4, osc5, osc6, mod1, mod2, mod3;
@@ -7,6 +8,7 @@ maxiFilter volfilter, lpf, hpf;
 maxiDistortion dist;
 maxiFlanger flang;
 maxiChorus chorus;
+//maxiFFT myFFT;
 
 int freq = 440;
 
@@ -67,20 +69,20 @@ void play(double *output) {
     	extractFlag = 0;
     }
     if (!extractFlag && wavFlag) {
-	wavFlag = 0;
-	for(int i = 0; i < sampleLength-1; i++) {
-	    csvFile << extractedSample0[i] << ',';
-	}
-	csvFile << extractedSample0[sampleLength-1] << endl;
+    	wavFlag = 0;
+    	for(int i = 0; i < sampleLength-1; i++) {
+    	    csvFile << extractedSample0[i] << ',';
+    	}
+    	csvFile << extractedSample0[sampleLength-1] << endl;
 
-	for(int i = 0; i < sampleLength-1; i++) {
-	    csvFile << extractedSample1[i] << ',';
-	}
-	csvFile << extractedSample1[sampleLength-1] << endl;
+    	for(int i = 0; i < sampleLength-1; i++) {
+    	    csvFile << extractedSample1[i] << ',';
+    	}
+    	csvFile << extractedSample1[sampleLength-1] << endl;
 
-	csvFile.close();
+    	csvFile.close();
 
-	cout << "saved csv" << endl;
+    	cout << "saved csv" << endl;
     } 
     double sin1vol = 1;
     double tri1vol = 0;
@@ -115,15 +117,4 @@ void play(double *output) {
     	extractedSample0[extractCounter] = output[0];
     	extractedSample1[extractCounter] = output[1];
     }
-    /*
-    countIndex = myCounter.phasor(1, 0, 9);
-    
-    myOscOutput = myOsc.sawn(anotherFilter.lopass(frequencies[countIndex], 0.001));
-    
-    output[0] = myFilter.lopass(myOscOutput, myCutoff.phasor(0.1, 0.01, 0.5));
-    
-    output[1] = output[0];
-    */
 }
-
-
