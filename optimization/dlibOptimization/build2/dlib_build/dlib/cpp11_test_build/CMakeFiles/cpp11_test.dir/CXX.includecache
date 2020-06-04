@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/dlib/dlib/cmake_utils/test_for_cpp11/cpp11_test.cpp
+memory
+-
+iostream
+-
+

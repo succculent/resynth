@@ -1,0 +1,8 @@
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/CMakeFiles/rebuild_cache.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/CMakeFiles/edit_cache.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/CMakeFiles/test.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/dlib_build/CMakeFiles/rebuild_cache.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/dlib_build/CMakeFiles/edit_cache.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/dlib_build/dlib/CMakeFiles/rebuild_cache.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/dlib_build/dlib/CMakeFiles/edit_cache.dir
+/Users/elisabethvehling/Desktop/resynth/resynth/optimization/build2/dlib_build/dlib/CMakeFiles/dlib.dir
