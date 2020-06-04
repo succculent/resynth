@@ -23,7 +23,7 @@ class Optimize():
         self.startOptimization()
 
 
-    #Converts an array from mono to stereo
+    #Converts an array from mono to stereo (actually converts from stereo to mono)
     def mono2Stereo(self, data):
         mono = (data[:,0] + data[:,1])/2 
         return mono
@@ -58,6 +58,11 @@ class Optimize():
     
 
     #TODO Make a call to start the computatioin
+    ''' #ADA# I don't think it is necessary to have the synth output before we
+        start optimization, bc we will likely only be using the synth output 
+        given the parameters from scipy.optimize.minimize - the current
+        parameters may be useful as a starting point, but not the current audio
+    '''
     def startOptimization(self):
         #Check that both the synth and sample input has been convereted 
         if(all(self._FFTSample) and all(self._FFTSynth)):
@@ -81,6 +86,7 @@ class Optimize():
         #convert to C++
         #Extend w c++
         #send the updated synth parameters to maximillian
+        #ADA# possibly wait until this parameter transfer has been confirmed
         return
 
 #TODO
@@ -88,22 +94,41 @@ class Compute(Optimize):
     def __init__(self):
         self._parameters = super().getSynthParameters()
 
-    #TODO @ada
     #MSE comparison between sample audio and synth audio; returns float
     def MSELoss(self, parameters):
-        #use super().FFTSynth and super().FFTSample for MSE @ ada
+        #gets synth output based on given parameters and stores the FFT in super().FFTSynth
+        super().updateSynthParams(parameters)
+        super().FFTSynth = super().FFT(super().getSynthOutput())
+        #use super().FFTSynth and super().FFTSample for MSE
+        sum = 0.0
+        sumI = 0.0j
+        divideVal = 0
+        for i in range(math.min(super().FFTSynth.size, super().FFTSample.size)):
+            sum += math.pow(xFFT[i].real - yFFT[i].real, 2)
+            sumI += math.pow(xFFT[i].imag - yFFT[i].imag, 2) #unsure what to do with imaginary components ATM
+            divideVal += 1
         # return results
-        return
+        return (sum + sumI.real)/divideVal
         
-    #TODO
+    #ADA# No documenation on the optimizeResult object, so this is honestly a shot in the dark - we'll have to test
     #Make call to minimize function
     def performOptimization(self):
-        # self.parameters = minimize(MSELoss, self.parameters, method='L-BFGS-B', jac=False, options={'disp': None}) )
+        #self.parameters = minimize(MSELoss, self.parameters, method='L-BFGS-B', jac=False, options={'disp': None})
+
+''' #ADA# Currently some issue passing the func, still haven't figured it out
+
+        optimizeResult = minimize(self.MSELoss, self._parameters, method='L-BFGS-B', jac=False, options={'disp': None})
         # self.boundParameters() #FIXME uncomment once exending is done
+        if (optimizeResult.success):
+            print("Optimization successful, saving and loading generated parameters")
+            self.parameters = optimizeResult.x
+        else:
+            print("Optimization terminated: " + optimizeResult.message)
+'''
         #super().updateSynthParams(self.parameters) #FIXME uncomment once exending is done
         return
 
-    #TODO
+    #TODO #ADA# we will need to go through the synth w lorand and alex bit by bit to know how to bound each parameter...
     #Might be used to manually bound the oputput
     def boundParameters(self):
         #check each parameter in self.parameters and see if it's above/below accepted bound
@@ -113,7 +138,8 @@ class Compute(Optimize):
 def main():
     print("Running optimization...")
     # warnings.filterwarnings("error") #FIXME uncomment with lines 42-43 to silence warnings (i think lol)
-    op = Optimize("./optimize/samples/harp.wav") #FIXME change to make path flexible
+    op = Optimize("./samples/harp.wav") #FIXME change to make path flexible
+    #op = Optimize("./optimize/samples/harp.wav") #FIXME change to make path flexible
     print("Done.")
     return
 
