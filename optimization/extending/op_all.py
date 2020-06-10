@@ -24,7 +24,7 @@ class Optimize():
         self.startOptimization()
 
 
-    #Converts an array from mono to stereo (actually converts from stereo to mono)
+    #Converts an array from mono to stereo
     def stereo2Mono(self, data):
         mono = (data[:,0] + data[:,1])/2 
         return mono
@@ -41,7 +41,7 @@ class Optimize():
         except FileNotFoundError:
             print("Error: Input file was not found. Terminating optimization")
             sys.exit(1)
-        # except scipy.io.wavfile.WavFileWarning: #uncomment to silence warnings
+        #except scipy.io.wavfile.WavFileWarning: #uncomment to silence warnings
             #pass
 
     #TODO Retrieves the current synth output audio
@@ -62,7 +62,7 @@ class Optimize():
     def startOptimization(self):
         #Check that both the synth and sample input has been convereted 
         if(all(self._FFTSample)):
-            compute = Compute()
+            compute = Compute(self._FFTSample)
             results = compute.performOptimization()
             self.updateSynthParams(results)
         else:
@@ -72,7 +72,7 @@ class Optimize():
     #TODO
     def getSynthParameters(self):
         #gets the current parameters from synth
-        sample = [1.0,2.0,3.0,4.0,5.0,6.0,7.0, 8.0,9.0,10.0] #FIXME replace later with actual synth params, this is just for testing purposes
+        sample = [1, 1, 1, 1, 1, 1, 0, 0] #FIXME replace later with actual synth params, this is just for testing purposes
         #returns array
         return sample
 
@@ -88,45 +88,45 @@ class Optimize():
 
 #TODO
 class Compute(Optimize):
-    def __init__(self):
-        self._parameters = super().getSynthParameters()
+    def __init__(self, FFTS):
+        self.__parameters = super().getSynthParameters()
+        self.__FFTSample = FFTS
 
     #MSE comparison between sample audio and synth audio; returns float
     def MSELoss(self, parameters):
         #gets synth output based on given parameters and stores the FFT in super().FFTSynth
         super().updateSynthParams(parameters)
         FFTSynth = super().FFT(super().getSynthOutput())
-        #use super().FFTSynth and super().FFTSample for MSE
+
         sum = 0.0
         sumI = 0.0j
         divideVal = 0
-        for i in range(math.min(super().FFTSynth.size, super().FFTSample.size)):
-            sum += math.pow(xFFT[i].real - yFFT[i].real, 2)
-            sumI += math.pow(xFFT[i].imag - yFFT[i].imag, 2) #unsure what to do with imaginary components ATM
+        for i in range(min(len(FFTSynth), len(self.__FFTSample))):
+            sum += math.pow(FFTSynth[i].real - self.__FFTSample[i].real, 2)
+            sumI += math.pow(FFTSynth[i].imag - self.__FFTSample[i].imag, 2) #unsure what to do with imaginary components ATM
             divideVal += 1
         # return results
-        return (sum + sumI.real)/divideVal
+        loss = (sum + sumI.real)/divideVal
+        print ("~~~~~~~~~~~~~~~~~~~~~")
+        print("LOSS IS: " + str(loss))
+        return loss
         
-    #ADA# No documenation on the optimizeResult object, so this is honestly a shot in the dark - we'll have to test
     #Make call to minimize function
     def performOptimization(self):
-        #self.parameters = minimize(MSELoss, self.parameters, method='L-BFGS-B', jac=False, options={'disp': None})
-
-        ''' 
-            #ADA# Currently some issue passing the func, still haven't figured it out
-
-                optimizeResult = minimize(self.MSELoss, self._parameters, method='L-BFGS-B', jac=False, options={'disp': None})
-                # self.boundParameters() #FIXME uncomment once exending is done
-                if (optimizeResult.success):
-                    print("Optimization successful, saving and loading generated parameters")
-                    self.parameters = optimizeResult.x
-                else:
-                    print("Optimization terminated: " + optimizeResult.message)
-        '''
-        #super().updateSynthParams(self.parameters) #FIXME uncomment once exending is done
+        temp = self.__parameters
+        #_bounds = [(0, 1) for _ in temp] #template for declaring bounds for variables... after jac=False put bounds=_bounds
+        opResult = minimize(self.MSELoss, temp, method='L-BFGS-B', jac=False, options={'disp': None})
+        results = opResult.x
+        print("~~~~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~~~~~~~~")
+        print(opResult.success)
+        print("Final parameters are... ")
+        print(results)
+        print("~~~~~~~~~~~~~~~~~~~~~")
+        super().updateSynthParams(self.parameters) #FIXME uncomment once exending is done
         return
 
-    #TODO #ADA# we will need to go through the synth w lorand and alex bit by bit to know how to bound each parameter...
+    #TODO
     #Might be used to manually bound the oputput
     def boundParameters(self):
         #check each parameter in self.parameters and see if it's above/below accepted bound
@@ -136,7 +136,7 @@ class Compute(Optimize):
 def main():
     print("Running optimization...")
     # warnings.filterwarnings("error") #FIXME uncomment with lines 42-43 to silence warnings (i think lol)
-    op = Optimize("./optimize/samples/harp.wav") #FIXME change to make path flexible
+    op = Optimize("samples/harp.wav") #FIXME change to make path flexible
     print("Done.")
     return
 
