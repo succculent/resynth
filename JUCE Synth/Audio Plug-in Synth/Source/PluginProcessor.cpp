@@ -27,7 +27,7 @@ AudioPluginSynthAudioProcessor::AudioPluginSynthAudioProcessor()
     mySynth.clearVoices();
     mySynth.clearSounds();
     
-    for(int voice = 0; voice < 5; voice++)
+    for(int voice = 0; voice < 8; voice++)
     {
         mySynth.addVoice(new SynthVoice());
     }
@@ -172,7 +172,7 @@ void AudioPluginSynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
 //==============================================================================
 bool AudioPluginSynthAudioProcessor::hasEditor() const
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return false; // (change this to false if you choose to not supply an editor)
 }
 
 AudioProcessorEditor* AudioPluginSynthAudioProcessor::createEditor()
